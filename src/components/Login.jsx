@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
-import './Login.css'; // Стилдерди өзүнчө файлга сактаңыз
+import './css/Login.css'; // Стилдерди өзүнчө файлга сактаңыз
 
 const Login = ({ onLoginSuccess, onBack }) => {
   const [email, setEmail] = useState('');
