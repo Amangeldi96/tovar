@@ -172,3 +172,21 @@
     0% { border-color: #3d2b85; box-shadow: 0 0 20px rgba(61, 43, 133, 0.4); }
     100% { border-color: #6a49f2; box-shadow: 0 0 40px rgba(61, 43, 133, 0.6); }
 }
+.status-msg-error {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    border: 1px solid #ff4d4d;
+}
+.status-msg-success {
+    color: #2ecc71;
+    background: rgba(46, 204, 113, 0.1);
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 13px;
+    margin-bottom: 10px;
+    border: 1px solid #2ecc71;
+}
