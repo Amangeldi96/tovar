@@ -598,16 +598,24 @@ th, td, label, h1, h2, .total-box, .cat-btn, .logo {
         align-items: center;
     }
 
-    /* Footer ичиндеги баскычтарды иреттөө */
-.btn-word, .btn-print, .btn-add {
-    display: inline-flex;    /* Ийкемдүү кылат */
-    align-items: center;     /* Тигинен (вертикально) ортолошот */
-    justify-content: center; /* Туурасынан (горизонтально) ортолошот */
-    text-align: center;
-    vertical-align: middle;
-    line-height: normal;     /* Тексттин бийиктигин иретке келтирет */
-    padding: 0 15px;         /* Капталдарынан бир аз боштук */
-}
+/* 2. Баскычтарды мобилдикке ылайыктап кичирейтүү */
+    .header .btn-word, 
+    .header .btn-print {
+        display: inline-flex !important;
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+        height: 34px !important;
+        border-radius: 6px !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 3. Текстти кыскартуу (эгер батпай жатса, иконка эле калтырсаңыз болот) */
+    /* Мисалы: "Word" дегендин ордуна "W" же иконка */
+    
+    .header .logo {
+        font-size: 16px; /* Логотип бир аз кичирейет, баскычтарга орун бошотот */
+    }
 
     .total-box {
         font-size: 14px;
