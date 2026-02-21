@@ -96,7 +96,7 @@ const AdminPanel = ({ onBack }) => {
       unit: p.unit
     });
     setSuggestions([]);
-    setDuplicateError(`⚠️ Бул товар базада бар: ${p.mainCategory} > ${p.subCategory}`);
+    setDuplicateError(`Бул товар базада бар: ${p.name}`);
     setTimeout(() => setDuplicateError(""), 5000);
   };
 
@@ -255,7 +255,7 @@ const AdminPanel = ({ onBack }) => {
         <div style={styles.modalOverlay}>
           <div style={styles.modalContent}>
             <div style={{fontSize: '40px', marginBottom: '10px'}}>⚠️</div>
-            <h3 style={{color: '#333', marginBottom: '10px'}}>Чын эле Өчүрөсүзбү?</h3>
+            <h3 style={{color: '#333', marginBottom: '10px'}}>Чын эле өчүрөсүзбү?</h3>
             <p style={{fontSize: '14px', color: '#666', marginBottom: '20px'}}>
               "<strong>{productToDelete?.name}</strong>" өчүрүлсүнбү?
             </p>
