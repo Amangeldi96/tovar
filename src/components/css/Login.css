@@ -8,23 +8,21 @@
     font-family: 'Montserrat', sans-serif;
     user-select: none;
 }
+
+/* Экрандын ак болуп калышын ушул жер оңдойт */
 html, body {
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
-    /* Арка фонду кара кылат */
-    background-color: #030308; 
-}
-
-body {
+    background-color: #030308 !important; /* Фон толук кара */
     display: flex;
-    /* Форманы горизонталдык жана вертикалдык жактан так ортого коет */
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* 2. ФОН ЖАНА БОРБОРЛОШТУРУУ */
+/* 2. БАШКЫ КОНТЕЙНЕР */
 .auth-wrapper {
     width: 100%;
     max-width: 900px;
@@ -36,7 +34,7 @@ body {
     border: 2px solid #3d2b85;
     box-shadow: 0 0 40px rgba(61, 43, 133, 0.4);
     overflow: hidden;
-    animation: pulseBorder 4s infinite alternate; /* Неон пульсациясы */
+    animation: pulseBorder 4s infinite alternate;
 }
 
 @keyframes pulseBorder {
@@ -50,6 +48,7 @@ body {
     position: relative;
     overflow: hidden;
     z-index: 5;
+    background: #0b0b18;
 }
 
 .login-side, .forgot-side {
@@ -60,15 +59,14 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Жылмакай жылуу */
+    transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     background: #0b0b18;
 }
 
 .forgot-side {
-    transform: translateX(100%); /* Башында оң жакта жашыруун турат */
+    transform: translateX(100%);
 }
 
-/* АНИМАЦИЯ ИШТЕТҮҮ */
 .auth-wrapper.show-forgot .login-side {
     transform: translateX(-100%);
 }
@@ -76,7 +74,7 @@ body {
     transform: translateX(0);
 }
 
-/* 4. АРТКА БАСКЫЧЫ (ЖЕБЕСИ МЕНЕН) */
+/* 4. АРТКА БАСКЫЧЫ */
 .back-nav {
     display: flex;
     align-items: center;
@@ -95,15 +93,13 @@ body {
 .back-nav:hover {
     background: #6a49f2;
     color: white;
-    box-shadow: 0 0 15px rgba(106, 73, 242, 0.4);
 }
 
-/* 5. ТЕКСТТЕР ЖАНА ИНПУТТАР */
+/* 5. ИНПУТТАР (Инпуттун ичи ак болуп калышын оңдоо) */
 h1 {
     color: white;
-    font-size: 36px;
-    font-weight: 600;
-    margin-bottom: 30px;
+    font-size: 32px;
+    margin-bottom: 25px;
 }
 
 .input-group {
@@ -116,29 +112,28 @@ h1 {
     left: 0;
     bottom: 12px;
     color: #ccc;
-    font-size: 18px;
 }
 
 .input-group input {
     width: 100%;
-    /* Ичин тунук кылат */
-    background: transparent !important; 
+    background: transparent !important;
     border: none;
     border-bottom: 1px solid #555;
     padding: 10px 10px 10px 30px;
-    color: white;
+    color: white !important;
     font-size: 16px;
     outline: none;
 }
 
-/* Браузердин автоматтык толтуруу (autocomplete) түсүн оңдоо */
+/* Браузердин autocomplete (сары/ак фон) маселесин чечүү */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus {
-    -webkit-text-fill-color: white;
-    -webkit-box-shadow: 0 0 0px 1000px #0b0b18 inset;
+    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0px 1000px #0b0b18 inset !important;
     transition: background-color 5000s ease-in-out 0s;
 }
+
 .input-group input:focus {
     border-bottom-color: #6a49f2;
 }
@@ -151,37 +146,21 @@ input:-webkit-autofill:focus {
     border: 1px solid #6a49f2;
     border-radius: 50px;
     color: white;
-    font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     margin-top: 15px;
-    transition: 0.3s;
     text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(106, 73, 242, 0.5);
 }
 
 .forgot-trigger-btn {
     width: 100%;
-    padding: 12px;
     background: transparent;
     border: 1px solid #3d2b85;
+    padding: 12px;
     border-radius: 50px;
     color: #888;
-    font-size: 13px;
-    cursor: pointer;
     margin-top: 20px;
-    transition: 0.3s;
-}
-
-.forgot-trigger-btn:hover {
-    border-color: #6a49f2;
-    color: #6a49f2;
-    background: rgba(106, 73, 242, 0.05);
+    cursor: pointer;
 }
 
 /* 7. ОҢ ЖАГЫ (WELCOME) */
@@ -198,28 +177,29 @@ input:-webkit-autofill:focus {
     padding: 40px;
 }
 
-.welcome-side h2 {
-    font-size: 38px;
-    font-weight: 800;
-    margin-bottom: 10px;
-}
-
-
-
-/* 8. МОБИЛДИК ВЕРСИЯ (АНИМАЦИЯНЫ САКТОО МЕНЕН) */
+/* 8. МОБИЛДИК ВЕРСИЯ (Сүрөттөгү бузулуп жаткан жерди оңдоо) */
 @media (max-width: 768px) {
     .auth-wrapper {
-        max-width: 400px;
-        height: 500px;
+        max-width: 360px;
+        height: auto;
+        min-height: 520px; /* Бийиктигин мазмунга жараша кылабыз */
         flex-direction: column;
+        margin: 20px;
     }
+
     .welcome-side {
-        display: none; /* Мобилдикте оң жагы өчөт */
+        display: none !important; /* Мобилдикте оң жагы таптакыр өчөт */
     }
+
     .form-container {
-        flex: 1;
+        flex: none;
+        width: 100%;
+        height: 520px; /* Форма туруктуу бийиктикте болот */
     }
+
     .login-side, .forgot-side {
-        padding: 40px 30px;
+        padding: 40px 25px;
     }
+
+    h1 { font-size: 26px; }
 }
