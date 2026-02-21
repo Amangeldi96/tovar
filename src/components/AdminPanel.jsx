@@ -57,11 +57,26 @@ const AdminPanel = ({ onBack }) => {
     return () => unsubscribe();
   }, []);
 
-  const detectSubCategory = async (productName) => {
-  if (productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
-console.log("2. Токтотулду: Категория тандалган эмес же ат өтө кыска.");
+	
+
+const detectSubCategory = async (productName) => {
+  // 1. Консолдон текшерүү: функция иштедиби?
+  console.log("AI функциясы ишке кирди. Товар:", productName);
+
+  if (!productName || productName.length < 2) {
+    console.log("Токтотулду: Товардын аты өтө кыска.");
+    return;
+  }
+
+  if (formData.mainCategory === 'Тандаңыз...') {
+    console.log("Токтотулду: Башкы категория тандала элек.");
+    // Колдонуучуга эскертүү берүү (жардам катары)
+    return;
+  }
+
   try {
-    console.log("3. Серверге сурам кетти...");
+    console.log("Серверге сурам кетти (/api/classify)...");
+
     const response = await fetch("/api/classify", {
       method: "POST",
       headers: {
@@ -73,33 +88,35 @@ console.log("2. Токтотулду: Категория тандалган эм
           {
             role: "system",
             content: `Сен товарларды классификациялоочу адиссиң. 
-            Колдонуучу "${formData.mainCategory}" башкы категориясынын ичинде жаңы товар кошуп жатат.
-            Сен товардын атына карап, анын ИЧКИ категориясын (Sub-category) аныкта.
-            Жоопко ГАНА ички категориянын атын 1 сөз менен жаз.
-            Мисалы: "М400" -> "Цемент", "ПВС" -> "Кабель", "Унитаз" -> "Санфаянс".`
+            Колдонуучу "${formData.mainCategory}" категориясына товар кошуп жатат.
+            Товардын атына карап, анын ички категориясын ГАНА 1 сөз менен аныкта.`
           },
           {
             role: "user",
-            content: `Башкы категория: ${formData.mainCategory}. Товардын аты: "${productName}"`
+            content: `Категория: ${formData.mainCategory}. Товар: "${productName}"`
           }
         ],
         temperature: 0.1
       })
     });
 
+    console.log("Сервердин жообу (Status):", response.status);
+
     if (response.ok) {
       const data = await response.json();
-			console.log("5. OpenAI маалыматы:", data);
-      // Эгер OpenAI ката кайтарса (баланс ж.б.), текшеребиз
-      if (data.choices && data.choices.length > 0) {
+      console.log("OpenAIден келген маалымат:", data);
+
+      if (data.choices && data.choices[0].message.content) {
         const detected = data.choices[0].message.content.trim().replace(/[.]/g, "");
-        if (detected) setFormData(prev => ({ ...prev, subCategory: detected }));
+        console.log("Аныкталган категория:", detected);
+        setFormData(prev => ({ ...prev, subCategory: detected }));
       }
     } else {
-      console.error("Серверден ката келди:", response.statusText);
+      const errorData = await response.json();
+      console.error("Серверден ката келди:", errorData);
     }
   } catch (err) {
-    console.error("OpenAI аныктоо катасы:", err.message);
+    console.error("Fetch учурунда ката чыкты:", err.message);
   }
 };
 
