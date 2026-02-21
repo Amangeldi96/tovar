@@ -592,6 +592,11 @@ th, td, label, h1, h2, .total-box, .cat-btn, .logo {
         justify-content: space-between;
         align-items: center;
     }
+		.header .header-btns {
+        display: flex !important; /* Көрүнөө кылуу */
+        gap: 8px;
+        align-items: center;
+    }
 
     /* Footer ичиндеги баскычтарды иреттөө */
 .btn-word, .btn-print, .btn-add {
