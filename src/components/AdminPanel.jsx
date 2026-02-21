@@ -57,46 +57,50 @@ const AdminPanel = ({ onBack }) => {
     return () => unsubscribe();
   }, []);
 
-  // 2. Сиз сураган OpenAI бөлүгү (Өзгөртүүсүз сакталды)
   const detectSubCategory = async (productName) => {
-    if (productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
+  if (productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
 
-    try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [
-            {
-              role: "system",
-              content: `Сен товарларды классификациялоочу адиссиң. 
-              Колдонуучу "${formData.mainCategory}" башкы категориясынын ичинде жаңы товар кошуп жатат.
-              Сен товардын атына карап, анын ИЧКИ категориясын (Sub-category) аныкта.
-              Жоопко ГАНА ички категориянын атын 1 сөз менен жаз.
-              Мисалы: "М400" -> "Цемент", "ПВС" -> "Кабель", "Унитаз" -> "Санфаянс".`
-            },
-            {
-              role: "user",
-              content: `Башкы категория: ${formData.mainCategory}. Товардын аты: "${productName}"`
-            }
-          ],
-          temperature: 0.1
-        })
-      });
+  try {
+    // OpenAI дарегинин ордуна өзүбүздүн сервердик функцияга кайрылабыз
+    const response = await fetch("/api/classify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: `Сен товарларды классификациялоочу адиссиң. 
+            Колдонуучу "${formData.mainCategory}" башкы категориясынын ичинде жаңы товар кошуп жатат.
+            Сен товардын атына карап, анын ИЧКИ категориясын (Sub-category) аныкта.
+            Жоопко ГАНА ички категориянын атын 1 сөз менен жаз.
+            Мисалы: "М400" -> "Цемент", "ПВС" -> "Кабель", "Унитаз" -> "Санфаянс".`
+          },
+          {
+            role: "user",
+            content: `Башкы категория: ${formData.mainCategory}. Товардын аты: "${productName}"`
+          }
+        ],
+        temperature: 0.1
+      })
+    });
 
-      if (response.ok) {
-        const data = await response.json();
+    if (response.ok) {
+      const data = await response.json();
+      // Эгер OpenAI ката кайтарса (баланс ж.б.), текшеребиз
+      if (data.choices && data.choices.length > 0) {
         const detected = data.choices[0].message.content.trim().replace(/[.]/g, "");
         if (detected) setFormData(prev => ({ ...prev, subCategory: detected }));
       }
-    } catch (err) {
-      console.error("OpenAI аныктоо катасы:", err.message);
+    } else {
+      console.error("Серверден ката келди:", response.statusText);
     }
-  };
+  } catch (err) {
+    console.error("OpenAI аныктоо катасы:", err.message);
+  }
+};
 
   const handleSave = async () => {
     if (!formData.name || !formData.price || formData.mainCategory === 'Тандаңыз...') {
