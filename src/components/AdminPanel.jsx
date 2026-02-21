@@ -239,8 +239,8 @@ const detectSubCategory = async (productName) => {
           </div>
 
 <div className="form-item flex-grow-item" style={{ position: 'relative' }}>
-  {/* Жаңыланган заманбап подсказка */}
-  {formData.subCategory && (
+  {/* Эгер текст өчүрүлсө (formData.name бош болсо), подсказка дароо жоголот */}
+  {formData.subCategory && formData.name && (
     <div className="ai-suggestion-badge">
       <span className="sparkle-icon">✨</span>
       {formData.subCategory}
@@ -253,11 +253,19 @@ const detectSubCategory = async (productName) => {
     className="screenshot-input-style ai-input" 
     placeholder="Материалдын аты" 
     value={formData.name} 
-    onChange={e => setFormData({...formData, name: e.target.value})} 
+    onChange={(e) => {
+      const val = e.target.value;
+      setFormData({ ...formData, name: val });
+      
+      // Эгер колдонуучу текстти толук өчүрсө, subCategory'ни да тазалап салабыз
+      if (val === '') {
+        setFormData(prev => ({ ...prev, name: '', subCategory: '' }));
+      }
+    }} 
     onBlur={(e) => detectSubCategory(e.target.value)} 
     style={{
-      border: formData.subCategory ? '1px solid #3b82f6' : '1px solid #ddd',
-      boxShadow: formData.subCategory ? '0 0 8px rgba(59, 130, 246, 0.2)' : 'none'
+      border: (formData.subCategory && formData.name) ? '1px solid #3b82f6' : '1px solid #ddd',
+      boxShadow: (formData.subCategory && formData.name) ? '0 0 8px rgba(59, 130, 246, 0.2)' : 'none'
     }}
   />
 </div>
