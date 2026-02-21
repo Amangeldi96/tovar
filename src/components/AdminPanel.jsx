@@ -238,37 +238,36 @@ const detectSubCategory = async (productName) => {
             )}
           </div>
 
+
+
+
 <div className="form-item flex-grow-item" style={{ position: 'relative' }}>
-  {/* Эгер текст өчүрүлсө (formData.name бош болсо), подсказка дароо жоголот */}
+  {/* Подсказка - эми ал жумшак көлөкө жана градиент менен */}
   {formData.subCategory && formData.name && (
-    <div className="ai-suggestion-badge">
-      <span className="sparkle-icon">✨</span>
-      {formData.subCategory}
-      <div className="badge-arrow"></div>
+    <div className="modern-ai-badge">
+      <div className="pulse-dot"></div>
+      <span className="badge-text">{formData.subCategory}</span>
+      <div className="badge-tail"></div>
     </div>
   )}
 
   <input 
     type="text" 
-    className="screenshot-input-style ai-input" 
-    placeholder="Материалдын аты" 
+    className={`modern-input ${formData.subCategory && formData.name ? 'input-active' : ''}`}
+    placeholder="Материалдын аты..." 
     value={formData.name} 
     onChange={(e) => {
       const val = e.target.value;
       setFormData({ ...formData, name: val });
-      
-      // Эгер колдонуучу текстти толук өчүрсө, subCategory'ни да тазалап салабыз
       if (val === '') {
         setFormData(prev => ({ ...prev, name: '', subCategory: '' }));
       }
     }} 
     onBlur={(e) => detectSubCategory(e.target.value)} 
-    style={{
-      border: (formData.subCategory && formData.name) ? '1px solid #3b82f6' : '1px solid #ddd',
-      boxShadow: (formData.subCategory && formData.name) ? '0 0 8px rgba(59, 130, 246, 0.2)' : 'none'
-    }}
   />
 </div>
+
+
 
           <div className="form-item small-item custom-dropdown-container">
             <div className={`custom-dropdown-trigger blue-border-always ${unitOpen ? 'is-open' : ''}`} onClick={() => setUnitOpen(!unitOpen)}>
