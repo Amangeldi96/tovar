@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
+import './Login.css'; // Стилдерди өзүнчө файлга сактаңыз
 
 const Login = ({ onLoginSuccess, onBack }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Глазок үчүн абал
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
@@ -23,74 +24,69 @@ const Login = ({ onLoginSuccess, onBack }) => {
 
   const handleResetPassword = async () => {
     if (!email) {
-      setError("Паролду калыбына келтирүү үчүн адегенде Email жазыңыз!");
+      setError("Email жазыңыз!");
       return;
     }
     try {
       await sendPasswordResetEmail(auth, email);
-      setMessage("Паролду өзгөртүү шилтемеси Email почтаңызга жөнөтүлдү.");
+      setMessage("Шилтеме почтаңызга жөнөтүлдү.");
       setError('');
     } catch (err) {
-      setError("Ката кетти. Email туура экенин текшериңиз.");
+      setError("Email туура эмес!");
     }
   };
 
   return (
-    <div style={styles.container}>
-      <form onSubmit={handleLogin} style={styles.form}>
-        <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Админ Панель</h2>
-        
-        {error && <p style={{ color: 'red', textAlign: 'center', fontSize: '14px' }}>{error}</p>}
-        {message && <p style={{ color: 'green', textAlign: 'center', fontSize: '14px' }}>{message}</p>}
-        
+    <div className="login-full-screen">
+      <div className="background">
+        <div className="shape"></div>
+        <div className="shape"></div>
+      </div>
+      
+      <form className="glass-form" onSubmit={handleLogin}>
+        <h3>Админ Панель</h3>
+
+        {error && <p className="status-msg error">{error}</p>}
+        {message && <p className="status-msg success">{message}</p>}
+
+        <label htmlFor="email">Email</label>
         <input 
-          type="email" placeholder="Email" value={email} 
-          onChange={(e) => setEmail(e.target.value)} style={styles.input} required 
+          type="email" 
+          placeholder="Электрондук почта" 
+          id="email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+          required 
         />
-        
-        <div style={styles.passwordContainer}>
+
+        <label htmlFor="password">Пароль</label>
+        <div className="password-wrapper">
           <input 
             type={showPassword ? "text" : "password"} 
             placeholder="Пароль" 
+            id="password" 
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
-            style={styles.passwordInput} required 
+            required 
           />
-          <span onClick={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
+          <span className="eye-toggle" onClick={() => setShowPassword(!showPassword)}>
             {showPassword ? (
-              /* Көзү ачык SVG */
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             ) : (
-              /* Көзү жабык SVG */
-              <svg viewBox="0 0 24 24" fill="none" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9.60997 9.60714C8.05503 10.4549 7 12.1043 7 14C7 16.7614 9.23858 19 12 19C13.8966 19 15.5466 17.944 16.3941 16.3878M21 14C21 9.02944 16.9706 5 12 5C11.5582 5 11.1238 5.03184 10.699 5.09334M3 14C3 11.0069 4.46104 8.35513 6.70883 6.71886M3 3L21 21" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
             )}
           </span>
         </div>
-        
-        <button type="submit" style={styles.button}>КИРҮҮ</button>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '15px' }}>
-          <p onClick={handleResetPassword} style={styles.resetLink}>Паролду унутум?</p>
-          <p onClick={onBack} style={styles.resetLink}>← Артка</p>
+
+        <button type="submit" className="login-submit">КИРҮҮ</button>
+
+        <div className="form-links">
+          <div className="link-item" onClick={handleResetPassword}>Унутуп калдым?</div>
+          <div className="link-item" onClick={onBack}>← Артка</div>
         </div>
       </form>
     </div>
   );
-};
-
-const styles = {
-  container: { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f0f2f5', position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000 },
-  form: { background: '#fff', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', width: '320px' },
-  input: { width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '6px', border: '1px solid #ddd', boxSizing: 'border-box' },
-  passwordContainer: { position: 'relative', width: '100%', marginBottom: '15px' },
-  passwordInput: { width: '100%', padding: '12px', borderRadius: '6px', border: '1px solid #ddd', boxSizing: 'border-box' },
-  eyeIcon: { position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer', opacity: 0.6, display: 'flex', alignItems: 'center' },
-  button: { width: '100%', padding: '12px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' },
-  resetLink: { color: '#666', cursor: 'pointer', fontSize: '12px', textDecoration: 'underline' }
 };
 
 export default Login;
