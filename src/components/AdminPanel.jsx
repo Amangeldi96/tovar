@@ -82,8 +82,8 @@ const AdminPanel = ({ onBack }) => {
     const id = Date.now();
     const config = {
       success: { bg: '#2ecc71', icon: <Icons.Success /> },
-      error: { bg: '#ff1900', icon: <Icons.Error /> },
-      info: { bg: '#ff9100', icon: <Icons.Info /> }
+      error: { bg: '#ffbb00', icon: <Icons.Error /> },
+      info: { bg: '#ff0040', icon: <Icons.Info /> }
     };
     
     const { bg, icon } = config[type] || config.success;
