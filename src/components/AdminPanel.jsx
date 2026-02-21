@@ -283,7 +283,7 @@ const AdminPanel = ({ onBack }) => {
             </div>
             {catOpen && (
               <div className="custom-dropdown-menu">
-                {['Строй материал', 'Хоз товар', 'Сантехника', 'Электроника', 'ПВХ жана Алюминий'].map(item => (
+                {['Строй материал', 'Хоз товар', 'Сантехника', 'Электроника', 'ПВХ жана Алюминий', 'Автозапчасти'].map(item => (
                   <div key={item} className="dropdown-option" onClick={() => { setFormData({...formData, mainCategory: item}); setCatOpen(false); }}>{item}</div>
                 ))}
               </div>
@@ -320,7 +320,7 @@ const AdminPanel = ({ onBack }) => {
                     onClick={() => selectSuggestion(p)}
                     onMouseDown={(e) => e.preventDefault()} // Blur болуп кетпеши үчүн
                   >
-                    🔍 <b>{p.name}</b> — {p.mainCategory} ({p.subCategory})
+                     <b>{p.name}</b> — {p.mainCategory} ({p.subCategory})
                   </div>
                 ))}
               </div>
