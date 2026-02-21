@@ -748,3 +748,78 @@ td:last-child {
   cursor: pointer;
   font-weight: bold;
 }
+
+
+
+
+
+/* Подсказкалар контейнери */
+.admin-container [style*="suggestionBox"] {
+    position: absolute;
+    top: calc(100% + 8px) !important; /* Инпуттан бир аз төмөн */
+    left: 0;
+    width: 100%;
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+    overflow: hidden !important;
+    z-index: 2000 !important;
+    animation: fadeInSlide 0.2s ease-out;
+}
+
+/* Ар бир товардын сабы */
+.admin-container [style*="suggestionItem"] {
+    padding: 12px 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    transition: all 0.2s ease !important;
+    border-bottom: 1px solid #f5f5f5 !important;
+    cursor: pointer !important;
+}
+
+.admin-container [style*="suggestionItem"]:last-child {
+    border-bottom: none !important;
+}
+
+.admin-container [style*="suggestionItem"]:hover {
+    background-color: #f0f7ff !important; /* Жеңил көк түс */
+}
+
+/* Товардын аты */
+.admin-container [style*="suggestionItem"] b {
+    color: #333 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+/* Категориясы үчүн кичинекей текст */
+.admin-container [style*="suggestionItem"] span {
+    color: #888 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Подсказка чыккандагы анимация */
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Скроллборду сулуулоо */
+.admin-container [style*="suggestionBox"]::-webkit-scrollbar {
+    width: 5px;
+}
+
+.admin-container [style*="suggestionBox"]::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
