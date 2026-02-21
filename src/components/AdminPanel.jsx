@@ -56,29 +56,43 @@ const AdminPanel = ({ onBack }) => {
     unit: 'кг'
   });
 
-  // ЖАҢЫ: Уведомление чыгаруучу жардамчы функция
+// Категориялар үчүн кооз SVG иконкалар
+  const Icons = {
+    Success: () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    ),
+    Error: () => (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="15" y1="9" x2="9" y2="15"></line>
+        <line x1="9" y1="9" x2="15" y2="15"></line>
+      </svg>
+    ),
+    Info: () => (
+      <svg fill="#ff0000" viewBox="0 0 24 24" id="delete-alt" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color" stroke="#ff0000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M16,7V4a1,1,0,0,0-1-1H9A1,1,0,0,0,8,4V7m2,4v6m4-6v6" style="fill: none; stroke: #f38686; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path><path id="primary" d="M4,7H20M18,20V7H6V20a1,1,0,0,0,1,1H17A1,1,0,0,0,18,20Z" style="fill: none; stroke: #fe3939; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>
+    )
+  };
+
   const notify = (msg, type = 'success') => {
     const id = Date.now();
     const config = {
-      success: { bg: '#2ecc71', icon: '✅' },
-      error: { bg: '#ff1900', icon: '🚫' },
-      info: { 
-  bg: '#ff9100', 
-  icon: (
-    <svg fill="#ff0000" viewBox="0 0 24 24" id="delete-alt" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color" stroke="#ff0000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M16,7V4a1,1,0,0,0-1-1H9A1,1,0,0,0,8,4V7m2,4v6m4-6v6" style="fill: none; stroke: #f38686; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path>
-		<path id="primary" d="M4,7H20M18,20V7H6V20a1,1,0,0,0,1,1H17A1,1,0,0,0,18,20Z" style="fill: none; stroke: #fe3939; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g>
-		</svg>
-  )
-}
+      success: { bg: '#2ecc71', icon: <Icons.Success /> },
+      error: { bg: '#ff1900', icon: <Icons.Error /> },
+      info: { bg: '#ff9100', icon: <Icons.Info /> }
     };
     
     const { bg, icon } = config[type] || config.success;
+    
     setNotifications(prev => [...prev, { id, msg, bg, icon }]);
     
     setTimeout(() => {
       setNotifications(prev => prev.filter(n => n.id !== id));
     }, 4000);
   };
+
+
 
   const fetchProducts = async () => {
     try {
