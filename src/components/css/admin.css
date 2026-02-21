@@ -1,0 +1,391 @@
+/* --- ГЛОБАЛДЫК СТИЛДЕР --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --bg-main: #f8fafc;
+  --border-color: #e2e8f0;
+  --blue-accent: #316cf4;
+}
+
+.admin-container {
+  padding: 30px;
+  max-width: 1150px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-main);
+  min-height: 100vh;
+}
+
+/* HEADER & SEARCH */
+.admin-header-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  align-items: center;
+}
+
+.btn-back-minimal {
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.search-wrapper { flex: 1; }
+.search-wrapper input {
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 50px;
+  border: 1px solid var(--border-color);
+  outline: none;
+}
+
+/* ГОРИЗОНТАЛДУУ ФОРМА (Сүрөттөгүдөй) */
+.horizontal-form-card {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  margin-bottom: 30px;
+}
+
+.form-inner-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Инпуттардын стили */
+.screenshot-input-style {
+  width: 100%;
+  height: 46px;
+  padding: 0 15px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  font-size: 15px;
+  outline: none;
+  background: #fff;
+  transition: 0.2s;
+}
+
+.screenshot-input-style:focus {
+  border-color: var(--blue-accent);
+}
+
+/* Көк жээктүү селектор (Бирдик үчүн) */
+.blue-border-always {
+  border: 1.5px solid var(--blue-accent) !important;
+}
+
+/* Формадагы элементтердин өлчөмдөрү */
+.flex-grow-item { flex: 2; }
+.small-item { width: 100px; }
+.medium-item { width: 130px; }
+
+/* Көк кошуу баскычы */
+.btn-add-main {
+  height: 46px;
+  padding: 0 25px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-add-main:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* ТАБЛИЦА */
+.table-wrapper {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modern-table th {
+  background: #f8fafc;
+  padding: 15px 20px;
+  text-align: left;
+  font-size: 12px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modern-table td {
+  padding: 15px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.col-price { font-weight: 700; color: var(--primary); }
+.badge-main {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.btn-delete {
+  padding: 6px 12px;
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #ef4444;
+  color: white;
+}
+
+/* Бош болгондогу стиль */
+.admin-empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+}
+
+.empty-icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+/* Custom Dropdown негизги структурасы */
+.custom-dropdown-container {
+  position: relative;
+  min-width: 140px;
+}
+
+.small-item.custom-dropdown-container {
+  min-width: 80px;
+}
+
+.custom-dropdown-trigger {
+  height: 42px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #334155;
+  user-select: none;
+}
+
+/* Сиз сураган көк жээк */
+.blue-border-always {
+  border: 2.5px solid #316cf4 !important;
+  font-weight: 600;
+}
+
+.arrow-icon {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-left: 8px;
+}
+
+/* Тизме ачылгандагы стиль (Скриншоттогудай ак, көлөкөсү менен) */
+.custom-dropdown-menu {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  overflow: hidden;
+}
+
+.dropdown-option {
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.dropdown-option:hover {
+  background: #316cf4;
+  color: #ffffff;
+}
+
+/* Инпуттарды тегиздөө */
+.screenshot-input-style {
+  height: 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0 12px;
+  outline: none;
+  width: 100%;
+}
+
+
+
+
+
+
+/* 2. Контейнерди тегиздөө */
+.custom-dropdown-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 3. Триггердин негизги стили */
+.custom-dropdown-trigger {
+  position: relative;
+  width: 100%;
+  height: 42px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #334155;
+  transition: border-color 0.2s;
+}
+
+/* Көк жээк стили */
+.blue-border-always {
+  border: 2px solid #3b82f6 !important;
+}
+
+/* СТРЕЛКАНЫН СТИЛИ */
+.arrow-icon {
+  display: inline-block;
+  font-size: 10px;
+  color: #94a3b8;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+  
+  /* ЖАБЫК КЕЗДЕ: Оңду карап турат */
+  transform: rotate(-90deg); 
+}
+
+/* АЧЫЛГАНДА: Ылдый карап калат */
+.custom-dropdown-trigger.is-open .arrow-icon {
+  /* Баштапкы абалына (▼) келет */
+  transform: rotate(45deg);
+  color: #3b82f6;
+}
+
+/* 6. Дропдаун менюнун стили */
+.custom-dropdown-menu {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  overflow: hidden;
+  padding: 5px 0;
+}
+
+.dropdown-option {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.dropdown-option:hover {
+  background: #eff6ff;
+  color: #3b82f6;
+}
+
+/* Браузердин стрелкаларын өчүрүү (shadow DOM) */
+.custom-dropdown-trigger {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+select::-ms-expand {
+  display: none !important;
+}
+
+/* ================= MOBILE RESPONSIVE ================= */
+@media (max-width: 768px) {
+
+  .admin-container {
+    padding: 15px;
+  }
+
+  /* Header мобилде вертикалдуу */
+  .admin-header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-back-minimal {
+    width: 100%;
+  }
+
+  .search-wrapper input {
+    width: 100%;
+  }
+
+  /* Форма мобилде колонка болот */
+  .form-inner-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .flex-grow-item,
+  .small-item,
+  .medium-item {
+    width: 100% !important;
+  }
+
+  .btn-add-main {
+    width: 100%;
+  }
+
+  /* Таблица scroll менен ачылсын */
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .modern-table {
+    min-width: 600px;
+  }
+
+  /* Dropdown туура чыксын */
+  .custom-dropdown-menu {
+    position: absolute;
+    width: 100%;
+  }
+
+}
