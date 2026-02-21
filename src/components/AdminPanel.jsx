@@ -238,15 +238,36 @@ const detectSubCategory = async (productName) => {
             )}
           </div>
 
-          <div className="form-item flex-grow-item">
-            <input 
-              type="text" className="screenshot-input-style" placeholder="Материалдын аты" 
-              value={formData.name} 
-              onChange={e => setFormData({...formData, name: e.target.value})} 
-              onBlur={() => detectSubCategory(formData.name)} 
-            />
-            {formData.subCategory && <small className="ai-hint">Түрү: {formData.subCategory}</small>}
-          </div>
+<div className="form-item flex-grow-item" style={{ position: 'relative' }}>
+  <input 
+    type="text" 
+    className="screenshot-input-style" 
+    placeholder="Материалдын аты" 
+    style={{ paddingRight: formData.subCategory ? '100px' : '15px' }} // Категория үчүн орун калтырабыз
+    value={formData.name} 
+    onChange={e => setFormData({...formData, name: e.target.value})} 
+    onBlur={(e) => detectSubCategory(e.target.value)} 
+  />
+  
+  {formData.subCategory && (
+    <span style={{
+      position: 'absolute',
+      right: '10px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      backgroundColor: '#f0f2f5',
+      padding: '4px 8px',
+      borderRadius: '6px',
+      fontSize: '12px',
+      color: '#007bff',
+      fontWeight: 'bold',
+      pointerEvents: 'none', // Инпутту басканга тоскоол болбойт
+      border: '1px solid #d1d9e6'
+    }}>
+      {formData.subCategory}
+    </span>
+  )}
+</div>
 
           <div className="form-item small-item custom-dropdown-container">
             <div className={`custom-dropdown-trigger blue-border-always ${unitOpen ? 'is-open' : ''}`} onClick={() => setUnitOpen(!unitOpen)}>
