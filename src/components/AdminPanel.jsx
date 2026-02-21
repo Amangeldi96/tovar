@@ -14,6 +14,15 @@ const styles = {
     background: '#ff4d4f', color: 'white', padding: '12px 25px', borderRadius: '12px', 
     boxShadow: '0 10px 25px rgba(220, 53, 69, 0.4)', zIndex: 10001, fontWeight: 'bold', 
     display: 'flex', alignItems: 'center', gap: '10px', animation: 'slideInDown 0.4s ease-out' 
+  },
+  // Жаңы стиль подсказка үчүн
+  suggestionBox: {
+    position: 'absolute', top: '100%', left: 0, width: '100%', background: 'white',
+    borderRadius: '8px', boxShadow: '0 5px 15px rgba(0,0,0,0.2)', zIndex: 100,
+    maxHeight: '200px', overflowY: 'auto', border: '1px solid #eee', marginTop: '5px'
+  },
+  suggestionItem: {
+    padding: '10px', borderBottom: '1px solid #f0f0f0', cursor: 'pointer', textAlign: 'left', fontSize: '13px'
   }
 };
 
@@ -31,6 +40,9 @@ const AdminPanel = ({ onBack }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [duplicateError, setDuplicateError] = useState("");
+  
+  // Жаңы state подсказкалар үчүн
+  const [suggestions, setSuggestions] = useState([]);
 
   const [formData, setFormData] = useState({
     mainCategory: 'Тандаңыз...',
@@ -57,9 +69,38 @@ const AdminPanel = ({ onBack }) => {
     return () => unsubscribe();
   }, []);
 
-  // AI аркылуу товардын маанисин текшерүү (Дубликатты аныктоо)
+  // Издөө учурунда подсказкаларды табуу
+  const handleNameChange = (e) => {
+    const val = e.target.value;
+    setFormData({ ...formData, name: val });
+
+    if (val.length > 0) {
+      const filtered = products.filter(p => 
+        p.name.toLowerCase().includes(val.toLowerCase()) || 
+        (typeof p.name === 'string' && p.name.includes(val))
+      ).slice(0, 5); // Максимум 5 подсказка
+      setSuggestions(filtered);
+    } else {
+      setSuggestions([]);
+      setFormData(prev => ({ ...prev, subCategory: '' }));
+    }
+  };
+
+  // Подсказканы тандаганда
+  const selectSuggestion = (p) => {
+    setFormData({
+      ...formData,
+      name: p.name,
+      mainCategory: p.mainCategory,
+      subCategory: p.subCategory,
+      unit: p.unit
+    });
+    setSuggestions([]);
+    setDuplicateError(`⚠️ Бул товар базада бар: ${p.mainCategory} > ${p.subCategory}`);
+    setTimeout(() => setDuplicateError(""), 5000);
+  };
+
   const checkDuplicateWithAI = async (newName) => {
-    // Учурдагы товарлардын тизмесин текст катары даярдоо
     const existingList = products.map(p => p.name).join(", ");
     if (!existingList) return "UNIQUE";
 
@@ -72,10 +113,7 @@ const AdminPanel = ({ onBack }) => {
           messages: [
             { 
               role: "system", 
-              content: `Сен базадагы товарларды кайталануудан коргоочу жардамчысың. 
-              Эгер жаңы товар базада бар товардын синоними болсо же мааниси 100% бирдей болсо (мисалы: "Цемент м400" жана "м400 цементи"), ГАНА "DUPLICATE" деп жооп бер.
-              Бирок цифралары же параметрлери башка болсо (мисалы: "Турба 100" жана "Турба 70"), "UNIQUE" деп жооп бер.
-              Жооп 1 сөз: DUPLICATE же UNIQUE.` 
+              content: `Сен базадагы товарларды кайталануудан коргоочу жардамчысың. Эгер жаңы товар базада бар товардын синоними болсо же мааниси 100% бирдей болсо, ГАНА "DUPLICATE" деп жооп бер. Жооп 1 сөз: DUPLICATE же UNIQUE.` 
             },
             { role: "user", content: `Базада: [${existingList}]. Жаңы товар: "${newName}"` }
           ],
@@ -86,7 +124,7 @@ const AdminPanel = ({ onBack }) => {
       return data.choices?.[0]?.message?.content?.trim() || "UNIQUE";
     } catch (err) {
       console.error("AI Check Error:", err);
-      return "UNIQUE"; // Ката чыкса өткөрүп ийет
+      return "UNIQUE";
     }
   };
 
@@ -114,23 +152,29 @@ const AdminPanel = ({ onBack }) => {
   };
 
   const handleSave = async () => {
+    // Текшерүү: Эгерде аты толук окшош товар базада болсо, кошууга уруксат бербөө
+    const isExactDuplicate = products.some(p => p.name.toLowerCase() === formData.name.toLowerCase() && p.mainCategory === formData.mainCategory);
+    
+    if (isExactDuplicate) {
+      setDuplicateError(`Ката! "${formData.name}" базада мурунтан бар!`);
+      setTimeout(() => setDuplicateError(""), 4000);
+      return;
+    }
+
     if (!formData.name || !formData.price || formData.mainCategory === 'Тандаңыз...') {
       return alert("Маалыматты толук киргизиңиз!");
     }
 
     setLoading(true);
-
-    // 1-кадам: AI аркылуу маанисин текшерүү
     const aiDecision = await checkDuplicateWithAI(formData.name);
 
     if (aiDecision === "DUPLICATE") {
-      setDuplicateError(`"${formData.name}" базада мурунтан бар (же синоними бар)!`);
+      setDuplicateError(`"${formData.name}" базада окшошу бар!`);
       setLoading(false);
       setTimeout(() => setDuplicateError(""), 4000);
       return;
     }
 
-    // 2-кадам: Базага сактоо
     try {
       await addDoc(collection(db, "all_products"), { 
         ...formData, 
@@ -146,7 +190,6 @@ const AdminPanel = ({ onBack }) => {
     }
   };
 
-  // ... (handleDelete, confirmDelete, handleLogin, handleExit калган функциялар өзгөрүүсүз калат)
   const handleDelete = async () => {
     if (productToDelete) {
       try {
@@ -202,7 +245,6 @@ const AdminPanel = ({ onBack }) => {
 
   return (
     <div className="admin-container">
-      {/* СТИЛДҮҮ AI ЭСКЕРТҮҮСҮ */}
       {duplicateError && (
         <div style={styles.alertToast}>
           <span>🚫</span> {duplicateError}
@@ -259,15 +301,30 @@ const AdminPanel = ({ onBack }) => {
             <input 
               type="text" 
               className={`modern-input ${formData.subCategory && formData.name ? 'input-active' : ''}`}
-              placeholder="Материалдын аты..." 
+              placeholder="Материалдын аты (Мисалы: 100)" 
               value={formData.name} 
-              onChange={(e) => {
-                const val = e.target.value;
-                setFormData({ ...formData, name: val });
-                if (val === '') { setFormData(prev => ({ ...prev, name: '', subCategory: '' })); }
+              onChange={handleNameChange} 
+              onBlur={(e) => {
+                setTimeout(() => setSuggestions([]), 200); // Подсказканы басканга убакыт берүү
+                detectSubCategory(e.target.value);
               }} 
-              onBlur={(e) => detectSubCategory(e.target.value)} 
             />
+            
+            {/* ПОДСКАЗКАЛАР ТИЗМЕСИ */}
+            {suggestions.length > 0 && (
+              <div style={styles.suggestionBox}>
+                {suggestions.map((p, i) => (
+                  <div 
+                    key={i} 
+                    style={styles.suggestionItem} 
+                    onClick={() => selectSuggestion(p)}
+                    onMouseDown={(e) => e.preventDefault()} // Blur болуп кетпеши үчүн
+                  >
+                    🔍 <b>{p.name}</b> — {p.mainCategory} ({p.subCategory})
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="form-item small-item custom-dropdown-container">
@@ -292,7 +349,6 @@ const AdminPanel = ({ onBack }) => {
         </div>
       </div>
 
-      {/* Таблица бөлүгү өзгөрүүсүз калат */}
       <div className="table-wrapper">
         <table className="modern-table">
           <thead>
