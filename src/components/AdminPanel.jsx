@@ -89,6 +89,7 @@ console.log("2. Токтотулду: Категория тандалган эм
 
     if (response.ok) {
       const data = await response.json();
+			console.log("5. OpenAI маалыматы:", data);
       // Эгер OpenAI ката кайтарса (баланс ж.б.), текшеребиз
       if (data.choices && data.choices.length > 0) {
         const detected = data.choices[0].message.content.trim().replace(/[.]/g, "");
