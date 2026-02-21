@@ -239,34 +239,52 @@ const detectSubCategory = async (productName) => {
           </div>
 
 <div className="form-item flex-grow-item" style={{ position: 'relative' }}>
+  {/* Подсказка (Tooltip) - Инпуттун үстүндө калкып турат */}
+  {formData.subCategory && (
+    <div style={{
+      position: 'absolute',
+      bottom: '110%', // Инпуттун үстү жагына чыгарат
+      left: '10px',
+      backgroundColor: '#1e293b', // Кочкул көк (түн түсү)
+      color: '#f8fafc',
+      padding: '6px 12px',
+      borderRadius: '8px',
+      fontSize: '12px',
+      fontWeight: '500',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '6px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+      zIndex: 10,
+      animation: 'fadeInUp 0.3s ease-out' // Пайда болгондо жагымдуу анимация
+    }}>
+      <span style={{ color: '#60a5fa' }}>✨ AI:</span>
+      <span>{formData.subCategory}</span>
+      {/* Төмөн караган кичинекей жебе (хвостик) */}
+      <div style={{
+        position: 'absolute',
+        top: '100%',
+        left: '15px',
+        borderWidth: '6px',
+        borderStyle: 'solid',
+        borderColor: '#1e293b transparent transparent transparent'
+      }}></div>
+    </div>
+  )}
+
   <input 
     type="text" 
     className="screenshot-input-style" 
     placeholder="Материалдын аты" 
-    style={{ paddingRight: formData.subCategory ? '100px' : '15px' }} // Категория үчүн орун калтырабыз
     value={formData.name} 
     onChange={e => setFormData({...formData, name: e.target.value})} 
     onBlur={(e) => detectSubCategory(e.target.value)} 
+    style={{
+      width: '100%',
+      transition: 'all 0.2s ease',
+      border: formData.subCategory ? '1px solid #60a5fa' : '1px solid #ddd' // Тапканда чети көгөрөт
+    }}
   />
-  
-  {formData.subCategory && (
-    <span style={{
-      position: 'absolute',
-      right: '10px',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      backgroundColor: '#f0f2f5',
-      padding: '4px 8px',
-      borderRadius: '6px',
-      fontSize: '12px',
-      color: '#007bff',
-      fontWeight: 'bold',
-      pointerEvents: 'none', // Инпутту басканга тоскоол болбойт
-      border: '1px solid #d1d9e6'
-    }}>
-      {formData.subCategory}
-    </span>
-  )}
 </div>
 
           <div className="form-item small-item custom-dropdown-container">
