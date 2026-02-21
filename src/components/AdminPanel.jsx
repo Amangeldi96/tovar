@@ -23,6 +23,32 @@ const AdminPanel = ({ onBack }) => {
   const [catOpen, setCatOpen] = useState(false);
   const [unitOpen, setUnitOpen] = useState(false);
 
+	
+const [showConfirm, setShowConfirm] = useState(false);
+const [productToDelete, setProductToDelete] = useState(null);
+
+// 2. Терезени ачуу
+const confirmDelete = (product) => {
+  setProductToDelete(product);
+  setShowConfirm(true);
+};
+
+// 3. Ырасталганда өчүрүү
+const handleDelete = async () => {
+  if (productToDelete) {
+    await deleteDoc(doc(db, "all_products", productToDelete.id));
+    fetchProducts(); // Тизмени жаңылоо
+    setShowConfirm(false); // Терезени жабуу
+    setProductToDelete(null);
+  }
+};
+const styles = {
+  modalOverlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000, backdropFilter: 'blur(4px)' },
+  modalContent: { background: 'white', padding: '30px', borderRadius: '15px', textAlign: 'center', width: '320px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' },
+  cancelBtn: { flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid #ddd', cursor: 'pointer', background: '#f5f5f5', fontWeight: 'bold' },
+  confirmBtn: { flex: 1, padding: '12px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: '#dc3545', color: 'white', fontWeight: 'bold' }
+};
+
   const [formData, setFormData] = useState({
     mainCategory: 'Тандаңыз...',
     subCategory: '',
@@ -67,11 +93,19 @@ const AdminPanel = ({ onBack }) => {
     }
   };
 
-  // OpenAI билдирүүлөрү (Сиздики өзгөргөн жок)
-  const detectSubCategory = async (productName) => {
-    if (productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
-    try {
-      const response = await openai.chat.completions.create({
+  /// Жаңыланган detectSubCategory функциясы
+const detectSubCategory = async (productName) => {
+  // Эгер ат өтө кыска болсо же категория тандалбаса, иштебейт
+  if (productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
           {
@@ -88,35 +122,26 @@ const AdminPanel = ({ onBack }) => {
           }
         ],
         temperature: 0.1
-      });
-      const detected = response.choices[0].message.content.trim();
-      if (detected) setFormData(prev => ({ ...prev, subCategory: detected }));
-    } catch (err) { console.error(err); }
-  };
+      })
+    });
 
-  const fetchProducts = async () => {
-    try {
-      const q = query(collection(db, "all_products"), orderBy("timestamp", "desc"));
-      const querySnapshot = await getDocs(q);
-      setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    } catch (e) { console.error(e); }
-  };
-
-  const handleSave = async () => {
-    if (!formData.name || !formData.price || formData.mainCategory === 'Тандаңыз...') {
-      return alert("Маалыматты толук киргизиңиз!");
+    // Эгер серверден ката келсе (мисалы, 401 же 403)
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error?.message || "API суранычы ишке ашкан жок");
     }
-    setLoading(true);
-    try {
-      await addDoc(collection(db, "all_products"), { 
-        ...formData, 
-        price: Number(formData.price), 
-        timestamp: serverTimestamp() 
-      });
-      fetchProducts();
-      setFormData({ ...formData, name: '', price: '', subCategory: '' }); 
-    } finally { setLoading(false); }
-  };
+
+    const data = await response.json();
+    const detected = data.choices[0].message.content.trim().replace(/[.]/g, "");
+
+    if (detected) {
+      setFormData(prev => ({ ...prev, subCategory: detected }));
+    }
+  } catch (err) {
+    console.error("OpenAI аныктоо катасы:", err.message);
+    // Ката болсо, колдонуучу өзү жаза алгыдай болушу керек
+  }
+};
 
   // Эгер текшерип жаткан болсо, экран бош турсун
   if (authLoading) return <div style={{textAlign: 'center', marginTop: '50px'}}>Жүктөлүүдө...</div>;
@@ -167,6 +192,22 @@ const AdminPanel = ({ onBack }) => {
 
   return (
     <div className="admin-container">
+			{showConfirm && (
+  <div style={styles.modalOverlay}>
+    <div style={styles.modalContent}>
+      <div style={{fontSize: '40px', marginBottom: '10px'}}>⚠️</div>
+      <h3 style={{color: '#333', marginBottom: '10px'}}>Чын эле Өчүрөсүзбү?</h3>
+      <p style={{fontSize: '14px', color: '#666', marginBottom: '20px'}}>
+        "<strong>{productToDelete?.name}</strong>" бул товарды өчүрсөңүз ушул товар<br/>
+				биротоло очүп кетет
+      </p>
+      <div style={{display: 'flex', gap: '10px'}}>
+        <button onClick={() => setShowConfirm(false)} style={styles.cancelBtn}>Жок</button>
+        <button onClick={handleDelete} style={styles.confirmBtn}>Ооба, өчүрүлсүн</button>
+      </div>
+    </div>
+  </div>
+)}
       <div className="admin-header-row">
         <div>
            <button className="btn-back-minimal" onClick={handleExit}>← Артка</button>
@@ -250,7 +291,14 @@ const AdminPanel = ({ onBack }) => {
                 <td><span className="badge-sub">{p.subCategory || '---'}</span></td>
                 <td className="col-price">{p.price.toLocaleString()} сом</td>
                 <td>{p.unit}</td>
-                <td><button className="btn-delete" onClick={() => deleteDoc(doc(db,"all_products",p.id)).then(fetchProducts)}>Өчүрүү</button></td>
+<td>
+  <button 
+    className="btn-delete" 
+    onClick={() => confirmDelete(p)} // Дароо өчүрбөй, суроо терезесин ачат
+  >
+    Өчүрүү
+  </button>
+</td>
               </tr>
             ))}
           </tbody>
