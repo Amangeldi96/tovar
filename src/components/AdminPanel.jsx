@@ -57,7 +57,7 @@ const AdminPanel = ({ onBack }) => {
     return () => unsubscribe();
   }, []);
 
-	
+
 
 const detectSubCategory = async (productName) => {
   // 1. Консолдон текшерүү: функция иштедиби?
@@ -227,7 +227,7 @@ const detectSubCategory = async (productName) => {
           <div className="form-item custom-dropdown-container">
             <div className={`custom-dropdown-trigger ${catOpen ? 'is-open' : ''}`} onClick={() => setCatOpen(!catOpen)}>
               <span className="selected-value">{formData.mainCategory}</span>
-              <span className="arrow-icon">▼</span>
+              <span className="arrow-icon"></span>
             </div>
             {catOpen && (
               <div className="custom-dropdown-menu">
@@ -251,7 +251,7 @@ const detectSubCategory = async (productName) => {
           <div className="form-item small-item custom-dropdown-container">
             <div className={`custom-dropdown-trigger blue-border-always ${unitOpen ? 'is-open' : ''}`} onClick={() => setUnitOpen(!unitOpen)}>
               <span className="selected-value">{formData.unit}</span>
-              <span className="arrow-icon">▼</span>
+              <span className="arrow-icon"></span>
             </div>
             {unitOpen && (
               <div className="custom-dropdown-menu">
