@@ -8,7 +8,9 @@ const styles = {
   modalOverlay: { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000, backdropFilter: 'blur(4px)' },
   modalContent: { background: 'white', padding: '30px', borderRadius: '15px', textAlign: 'center', width: '320px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' },
   cancelBtn: { flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid #ddd', cursor: 'pointer', background: '#f5f5f5', fontWeight: 'bold' },
-  confirmBtn: { flex: 1, padding: '12px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: '#dc3545', color: 'white', fontWeight: 'bold' }
+  confirmBtn: { flex: 1, padding: '12px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: '#dc3545', color: 'white', fontWeight: 'bold' },
+  // Жаңы эскертүү стили
+  alertToast: { position: 'fixed', top: '20px', right: '20px', background: '#ff4d4f', color: 'white', padding: '15px 25px', borderRadius: '10px', boxShadow: '0 5px 15px rgba(0,0,0,0.2)', zIndex: 10001, fontWeight: 'bold', animation: 'slideIn 0.3s ease-out' }
 };
 
 const AdminPanel = ({ onBack }) => {
@@ -24,6 +26,7 @@ const AdminPanel = ({ onBack }) => {
   const [unitOpen, setUnitOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+  const [duplicateError, setDuplicateError] = useState(""); // Жаңы статус
 
   const [formData, setFormData] = useState({
     mainCategory: 'Тандаңыз...',
@@ -33,7 +36,6 @@ const AdminPanel = ({ onBack }) => {
     unit: 'кг'
   });
 
-  // 1. fetchProducts функциясы (башкалар көрүшү үчүн жогору жакта)
   const fetchProducts = async () => {
     try {
       const q = query(collection(db, "all_products"), orderBy("timestamp", "desc"));
@@ -57,73 +59,48 @@ const AdminPanel = ({ onBack }) => {
     return () => unsubscribe();
   }, []);
 
-
-
-const detectSubCategory = async (productName) => {
-  // 1. Консолдон текшерүү: функция иштедиби?
-  console.log("AI функциясы ишке кирди. Товар:", productName);
-
-  if (!productName || productName.length < 2) {
-    console.log("Токтотулду: Товардын аты өтө кыска.");
-    return;
-  }
-
-  if (formData.mainCategory === 'Тандаңыз...') {
-    console.log("Токтотулду: Башкы категория тандала элек.");
-    // Колдонуучуга эскертүү берүү (жардам катары)
-    return;
-  }
-
-  try {
-    console.log("Серверге сурам кетти (/api/classify)...");
-
-    const response = await fetch("/api/classify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: `Сен товарларды классификациялоочу адиссиң. 
-            Колдонуучу "${formData.mainCategory}" категориясына товар кошуп жатат.
-            Товардын атына карап, анын ички категориясын ГАНА 1 сөз менен аныкта.`
-          },
-          {
-            role: "user",
-            content: `Категория: ${formData.mainCategory}. Товар: "${productName}"`
-          }
-        ],
-        temperature: 0.1
-      })
-    });
-
-    console.log("Сервердин жообу (Status):", response.status);
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log("OpenAIден келген маалымат:", data);
-
-      if (data.choices && data.choices[0].message.content) {
+  const detectSubCategory = async (productName) => {
+    if (!productName || productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
+    try {
+      const response = await fetch("/api/classify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: `Сен товарларды классификациялоочу адиссиң. Товардын атына карап, анын ички категориясын ГАНА 1 сөз менен аныкта.` },
+            { role: "user", content: `Категория: ${formData.mainCategory}. Товар: "${productName}"` }
+          ],
+          temperature: 0.1
+        })
+      });
+      if (response.ok) {
+        const data = await response.json();
         const detected = data.choices[0].message.content.trim().replace(/[.]/g, "");
-        console.log("Аныкталган категория:", detected);
         setFormData(prev => ({ ...prev, subCategory: detected }));
       }
-    } else {
-      const errorData = await response.json();
-      console.error("Серверден ката келди:", errorData);
+    } catch (err) {
+      console.error("Fetch учурунда ката чыкты:", err.message);
     }
-  } catch (err) {
-    console.error("Fetch учурунда ката чыкты:", err.message);
-  }
-};
+  };
 
   const handleSave = async () => {
     if (!formData.name || !formData.price || formData.mainCategory === 'Тандаңыз...') {
       return alert("Маалыматты толук киргизиңиз!");
     }
+
+    // --- ТЕКШЕРҮҮ: Товар базада барбы? ---
+    const isDuplicate = products.some(p => 
+      p.name.toLowerCase().replace(/\s/g, '') === formData.name.toLowerCase().replace(/\s/g, '')
+    );
+
+    if (isDuplicate) {
+      setDuplicateError(`"${formData.name}" базада мурунтан бар!`);
+      setTimeout(() => setDuplicateError(""), 3000); // 3 сек кийин өчүрүү
+      return;
+    }
+    // ------------------------------------
+
     setLoading(true);
     try {
       await addDoc(collection(db, "all_products"), { 
@@ -147,9 +124,7 @@ const detectSubCategory = async (productName) => {
         await fetchProducts();
         setShowConfirm(false);
         setProductToDelete(null);
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) { console.error(e); }
     }
   };
 
@@ -173,9 +148,7 @@ const detectSubCategory = async (productName) => {
       await signOut(auth);
       setUser(null);
       onBack();
-    } catch (e) {
-      onBack();
-    }
+    } catch (e) { onBack(); }
   };
 
   if (authLoading) return <div style={{textAlign: 'center', marginTop: '50px'}}>Жүктөлүүдө...</div>;
@@ -199,6 +172,13 @@ const detectSubCategory = async (productName) => {
 
   return (
     <div className="admin-container">
+      {/* ДУБЛИКАТ ЭСКЕРТҮҮСҮ */}
+      {duplicateError && (
+        <div style={styles.alertToast}>
+          ❌ {duplicateError}
+        </div>
+      )}
+
       {showConfirm && (
         <div style={styles.modalOverlay}>
           <div style={styles.modalContent}>
@@ -231,43 +211,37 @@ const detectSubCategory = async (productName) => {
             </div>
             {catOpen && (
               <div className="custom-dropdown-menu">
-                {['Строй материал', 'Хоз товар', 'Сантехника', 'Электроника'].map(item => (
+                {['Строй материал', 'Хоз товар', 'Сантехника', 'Электроника', 'ПВХ жана Алюминий'].map(item => (
                   <div key={item} className="dropdown-option" onClick={() => { setFormData({...formData, mainCategory: item}); setCatOpen(false); }}>{item}</div>
                 ))}
               </div>
             )}
           </div>
 
+          <div className="form-item flex-grow-item" style={{ position: 'relative' }}>
+            {formData.subCategory && formData.name && (
+              <div className="modern-ai-badge">
+                <div className="pulse-dot"></div>
+                <span className="badge-text">{formData.subCategory}</span>
+                <div className="badge-tail"></div>
+              </div>
+            )}
 
-
-
-<div className="form-item flex-grow-item" style={{ position: 'relative' }}>
-  {/* Подсказка - эми ал жумшак көлөкө жана градиент менен */}
-  {formData.subCategory && formData.name && (
-    <div className="modern-ai-badge">
-      <div className="pulse-dot"></div>
-      <span className="badge-text">{formData.subCategory}</span>
-      <div className="badge-tail"></div>
-    </div>
-  )}
-
-  <input 
-    type="text" 
-    className={`modern-input ${formData.subCategory && formData.name ? 'input-active' : ''}`}
-    placeholder="Материалдын аты..." 
-    value={formData.name} 
-    onChange={(e) => {
-      const val = e.target.value;
-      setFormData({ ...formData, name: val });
-      if (val === '') {
-        setFormData(prev => ({ ...prev, name: '', subCategory: '' }));
-      }
-    }} 
-    onBlur={(e) => detectSubCategory(e.target.value)} 
-  />
-</div>
-
-
+            <input 
+              type="text" 
+              className={`modern-input ${formData.subCategory && formData.name ? 'input-active' : ''}`}
+              placeholder="Материалдын аты..." 
+              value={formData.name} 
+              onChange={(e) => {
+                const val = e.target.value;
+                setFormData({ ...formData, name: val });
+                if (val === '') {
+                  setFormData(prev => ({ ...prev, name: '', subCategory: '' }));
+                }
+              }} 
+              onBlur={(e) => detectSubCategory(e.target.value)} 
+            />
+          </div>
 
           <div className="form-item small-item custom-dropdown-container">
             <div className={`custom-dropdown-trigger blue-border-always ${unitOpen ? 'is-open' : ''}`} onClick={() => setUnitOpen(!unitOpen)}>
