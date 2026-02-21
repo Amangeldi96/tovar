@@ -1,220 +1,151 @@
-/* Login.css */
-
-/* 1. НЕГИЗГИ СТИЛДЕР */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
-    user-select: none;
-}
-
-body {
-    background-color: #030308;
+.login-full-screen {
+    background-color: #080710;
     height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* 2. БАШКЫ КОНТЕЙНЕР */
-.auth-wrapper {
-    width: 100%;
-    max-width: 900px;
-    height: 550px;
-    background: #0b0b18;
-    border-radius: 20px;
-    display: flex;
-    position: relative;
-    border: 2px solid #3d2b85;
-    box-shadow: 0 0 40px rgba(61, 43, 133, 0.4);
-    overflow: hidden;
-    animation: pulseBorder 4s infinite alternate;
-}
-
-@keyframes pulseBorder {
-    0% { border-color: #3d2b85; box-shadow: 0 0 20px rgba(61, 43, 133, 0.4); }
-    100% { border-color: #6a49f2; box-shadow: 0 0 40px rgba(61, 43, 133, 0.6); }
-}
-
-/* 3. ФОРМА КОНТЕЙНЕРИ */
-.form-container {
-    flex: 1.2;
-    position: relative;
-    overflow: hidden;
-    z-index: 5;
-}
-
-.login-side, .forgot-side {
+.background {
+    width: 430px;
+    height: 520px;
     position: absolute;
-    width: 100%;
-    height: 100%;
-    padding: 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    background: #0b0b18;
 }
 
-.forgot-side {
-    transform: translateX(100%);
+.background .shape {
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    border-radius: 50%;
 }
 
-.auth-wrapper.show-forgot .login-side {
-    transform: translateX(-100%);
-}
-.auth-wrapper.show-forgot .forgot-side {
-    transform: translateX(0);
-}
-
-/* АРТКА БАСКЫЧЫ */
-.back-nav {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(106, 73, 242, 0.1);
-    border: 1px solid #3d2b85;
-    padding: 6px 15px;
-    border-radius: 50px;
-    color: #6a49f2;
-    cursor: pointer;
-    width: fit-content;
-    margin-bottom: 20px;
-    transition: 0.3s;
+.shape:first-child {
+    background: linear-gradient(#1845ad, #23a2f6);
+    left: -80px;
+    top: -80px;
 }
 
-.back-nav:hover {
-    background: #6a49f2;
-    color: white;
-    box-shadow: 0 0 15px rgba(106, 73, 242, 0.4);
+.shape:last-child {
+    background: linear-gradient(to right, #ff512f, #f09819);
+    right: -30px;
+    bottom: -80px;
 }
 
-h1 {
-    color: white;
-    font-size: 36px;
-    font-weight: 600;
+.glass-form {
+    width: 400px;
+    background-color: rgba(255, 255, 255, 0.13);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+    padding: 50px 35px;
+    z-index: 10;
+}
+
+.glass-form h3 {
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 500;
+    text-align: center;
     margin-bottom: 30px;
 }
 
-.input-group {
-    position: relative;
-    margin-bottom: 25px;
-}
-
-.input-group i {
-    position: absolute;
-    left: 0;
-    bottom: 12px;
-    color: #ccc;
-    font-size: 18px;
-}
-
-.input-group input {
-    width: 100%;
-    background: transparent !important; /* !important - фонду бузбайт */
-    border: none;
-    border-bottom: 1px solid #555;
-    padding: 10px 10px 10px 30px;
-    color: white !important;
+.glass-form label {
+    display: block;
+    margin-top: 20px;
     font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.glass-form input {
+    display: block;
+    height: 50px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.07);
+    border-radius: 3px;
+    padding: 0 10px;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #ffffff;
+    border: none;
     outline: none;
 }
 
-/* Авто-толтуруудагы ак түстү оңдоо */
-input:-webkit-autofill {
-    -webkit-text-fill-color: white !important;
-    -webkit-box-shadow: 0 0 0px 1000px #0b0b18 inset !important;
-    transition: background-color 5000s ease-in-out 0s;
+::placeholder {
+    color: #e5e5e5;
 }
 
-.input-group input:focus { border-bottom-color: #6a49f2; }
-
-/* НЕГИЗГИ БАСКЫЧТАР */
-.action-btn {
+/* Глазок үчүн контейнер */
+.password-wrapper {
+    position: relative;
     width: 100%;
-    padding: 14px;
-    background: linear-gradient(90deg, #1e1152, #4b2ea3);
-    border: 1px solid #6a49f2;
-    border-radius: 50px;
-    color: white;
-    font-size: 16px;
-    font-weight: 500;
+}
+
+.eye-toggle {
+    position: absolute;
+    right: 15px;
+    top: 55%;
+    transform: translateY(-50%);
     cursor: pointer;
-    margin-top: 15px;
-    transition: 0.3s;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(106, 73, 242, 0.5);
-}
-
-/* ПАРОЛДУ УНУТТУМ БАСКЫЧЫ */
-.forgot-trigger-btn {
-    width: 100%;
-    padding: 12px;
-    background: transparent;
-    border: 1px solid #3d2b85;
-    border-radius: 50px;
-    color: #888;
-    font-size: 13px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: 0.3s;
-}
-
-.forgot-trigger-btn:hover {
-    border-color: #6a49f2;
-    color: #6a49f2;
-    background: rgba(106, 73, 242, 0.05);
-}
-
-/* ОҢ ЖАГЫ (WELCOME) */
-.welcome-side {
-    flex: 1;
-    background: linear-gradient(135deg, #0b0b18 20%, #4b2ea3 100%);
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
-    color: white;
-    text-align: center;
-    padding: 40px;
 }
 
-.welcome-side h2 {
-    font-size: 38px;
-    font-weight: 800;
+.eye-toggle svg {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+}
+
+.login-submit {
+    margin-top: 40px;
+    width: 100%;
+    background-color: #ffffff;
+    color: #080710;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+}
+
+.login-submit:hover {
+    background-color: #dddddd;
+}
+
+.form-links {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.link-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    backdrop-filter: blur(5px);
+}
+
+.link-item:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.status-msg {
+    font-size: 13px;
+    text-align: center;
     margin-bottom: 10px;
 }
 
-/* МОБИЛДИК ВЕРСИЯ */
-@media (max-width: 768px) {
-    .auth-wrapper { 
-        max-width: 380px; 
-        height: auto; 
-        min-height: 520px; 
-        flex-direction: column; 
-    }
-    .welcome-side { 
-        display: none !important; /* Мобилдикте баарын жаап калбашы үчүн */
-    }
-    .form-container {
-        flex: none;
-        width: 100%;
-        height: 520px;
-    }
-    .login-side, .forgot-side { 
-        padding: 40px 25px; 
-        position: absolute; 
-    }
-    .forgot-side { display: none; }
-    .auth-wrapper.show-forgot .forgot-side { display: flex; transform: none; }
-    .auth-wrapper.show-forgot .login-side { display: none; }
-}
+.status-msg.error { color: #ff6b6b; }
+.status-msg.success { color: #51cf66; }
