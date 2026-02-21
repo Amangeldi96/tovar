@@ -82,8 +82,8 @@ const AdminPanel = ({ onBack }) => {
     const id = Date.now();
     const config = {
       success: { bg: '#2ecc71', icon: <Icons.Success /> },
-      error: { bg: '#ffbb00', icon: <Icons.Error /> },
-      info: { bg: '#ff0040', icon: <Icons.Info /> }
+      error: { bg: '#ff0040', icon: <Icons.Error /> },
+      info: { bg: '#2ecc71', icon: <Icons.Info /> }
     };
     
     const { bg, icon } = config[type] || config.success;
@@ -346,7 +346,7 @@ const AdminPanel = ({ onBack }) => {
             </div>
             {unitOpen && (
               <div className="custom-dropdown-menu">
-                {['кг', 'шт', 'метр', 'пач', 'мешок', 'м²'].map(item => (
+                {['кг', 'шт', 'метр', 'пач', 'мешок', 'м²', 'м³'].map(item => (
                   <div key={item} className="dropdown-option" onClick={() => { setFormData({...formData, unit: item}); setUnitOpen(false); }}>{item}</div>
                 ))}
               </div>
