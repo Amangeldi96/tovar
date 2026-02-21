@@ -1,22 +1,15 @@
-/* 1. НЕГИЗГИ СТИЛДЕР */
-.auth-body {
+/* Login.css */
+
+/* 1. НЕГИЗГИ ЖӨНӨТҮҮЛӨР */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
-    background-color: #030308;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
+    user-select: none;
 }
 
-/* 2. БАШКЫ КОНТЕЙНЕР */
+/* 2. ФОН ЖАНА БОРБОРЛОШТУРУУ */
 .auth-wrapper {
     width: 100%;
     max-width: 900px;
@@ -28,7 +21,12 @@
     border: 2px solid #3d2b85;
     box-shadow: 0 0 40px rgba(61, 43, 133, 0.4);
     overflow: hidden;
-    animation: pulseBorder 4s infinite alternate;
+    animation: pulseBorder 4s infinite alternate; /* Неон пульсациясы */
+}
+
+@keyframes pulseBorder {
+    0% { border-color: #3d2b85; box-shadow: 0 0 20px rgba(61, 43, 133, 0.4); }
+    100% { border-color: #6a49f2; box-shadow: 0 0 40px rgba(61, 43, 133, 0.6); }
 }
 
 /* 3. ФОРМА КОНТЕЙНЕРИ */
@@ -47,14 +45,15 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Жылмакай жылуу */
     background: #0b0b18;
 }
 
 .forgot-side {
-    transform: translateX(100%);
+    transform: translateX(100%); /* Башында оң жакта жашыруун турат */
 }
 
+/* АНИМАЦИЯ ИШТЕТҮҮ */
 .auth-wrapper.show-forgot .login-side {
     transform: translateX(-100%);
 }
@@ -62,7 +61,7 @@
     transform: translateX(0);
 }
 
-/* ЭЛЕМЕНТТЕРДИН СТИЛИ */
+/* 4. АРТКА БАСКЫЧЫ (ЖЕБЕСИ МЕНЕН) */
 .back-nav {
     display: flex;
     align-items: center;
@@ -81,11 +80,14 @@
 .back-nav:hover {
     background: #6a49f2;
     color: white;
+    box-shadow: 0 0 15px rgba(106, 73, 242, 0.4);
 }
 
-.auth-wrapper h1 {
+/* 5. ТЕКСТТЕР ЖАНА ИНПУТТАР */
+h1 {
     color: white;
     font-size: 36px;
+    font-weight: 600;
     margin-bottom: 30px;
 }
 
@@ -113,8 +115,11 @@
     outline: none;
 }
 
-.input-group input:focus { border-bottom-color: #6a49f2; }
+.input-group input:focus {
+    border-bottom-color: #6a49f2;
+}
 
+/* 6. БАСКЫЧТАР */
 .action-btn {
     width: 100%;
     padding: 14px;
@@ -123,10 +128,17 @@
     border-radius: 50px;
     color: white;
     font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
     margin-top: 15px;
     transition: 0.3s;
     text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(106, 73, 242, 0.5);
 }
 
 .forgot-trigger-btn {
@@ -136,10 +148,19 @@
     border: 1px solid #3d2b85;
     border-radius: 50px;
     color: #888;
+    font-size: 13px;
     cursor: pointer;
     margin-top: 20px;
+    transition: 0.3s;
 }
 
+.forgot-trigger-btn:hover {
+    border-color: #6a49f2;
+    color: #6a49f2;
+    background: rgba(106, 73, 242, 0.05);
+}
+
+/* 7. ОҢ ЖАГЫ (WELCOME) */
 .welcome-side {
     flex: 1;
     background: linear-gradient(135deg, #0b0b18 20%, #4b2ea3 100%);
@@ -153,40 +174,26 @@
     padding: 40px;
 }
 
-.welcome-side h2 { font-size: 38px; font-weight: 800; margin-bottom: 10px; }
+.welcome-side h2 {
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
 
-/* КАТА ЖАНА БИЛДИРҮҮЛӨР */
-.status-msg { font-size: 14px; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
-.error { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); border: 1px solid #ff4d4d; }
-.success { color: #2ecc71; background: rgba(46, 204, 113, 0.1); border: 1px solid #2ecc71; }
-.reset-hint { color: #888; font-size: 14px; margin-bottom: 20px; }
-
-/* МОБИЛДИК ВЕРСИЯ */
+/* 8. МОБИЛДИК ВЕРСИЯ (АНИМАЦИЯНЫ САКТОО МЕНЕН) */
 @media (max-width: 768px) {
-    .auth-wrapper { max-width: 400px; height: 500px; flex-direction: column; }
-    .welcome-side { display: none; }
-    .login-side, .forgot-side { padding: 40px 30px; }
-}
-
-@keyframes pulseBorder {
-    0% { border-color: #3d2b85; box-shadow: 0 0 20px rgba(61, 43, 133, 0.4); }
-    100% { border-color: #6a49f2; box-shadow: 0 0 40px rgba(61, 43, 133, 0.6); }
-}
-.status-msg-error {
-    color: #ff4d4d;
-    background: rgba(255, 77, 77, 0.1);
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 13px;
-    margin-bottom: 10px;
-    border: 1px solid #ff4d4d;
-}
-.status-msg-success {
-    color: #2ecc71;
-    background: rgba(46, 204, 113, 0.1);
-    padding: 8px;
-    border-radius: 5px;
-    font-size: 13px;
-    margin-bottom: 10px;
-    border: 1px solid #2ecc71;
+    .auth-wrapper {
+        max-width: 400px;
+        height: 500px;
+        flex-direction: column;
+    }
+    .welcome-side {
+        display: none; /* Мобилдикте оң жагы өчөт */
+    }
+    .form-container {
+        flex: 1;
+    }
+    .login-side, .forgot-side {
+        padding: 40px 30px;
+    }
 }

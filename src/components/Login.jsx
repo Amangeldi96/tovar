@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
-import './css/Login.css';
+import './Login.css'; // Сиз берген CSS ушул файлда болушу керек
 
-const Login = ({ onLoginSuccess, onBack }) => {
+const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isForgot, setIsForgot] = useState(false); // toggleForgot ордуна
+  const [isForgot, setIsForgot] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
-  // Кирүү функциясы
+  // Кирүү (Login) функциясы
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
-    setMessage('');
     try {
       await signInWithEmailAndPassword(auth, email, password);
       if (onLoginSuccess) onLoginSuccess();
@@ -23,8 +22,8 @@ const Login = ({ onLoginSuccess, onBack }) => {
     }
   };
 
-  // Паролду калыбына келтирүү
-  const handleResetPassword = async (e) => {
+  // Паролду калыбына келтирүү функциясы
+  const handleReset = async (e) => {
     e.preventDefault();
     setError('');
     setMessage('');
@@ -32,24 +31,27 @@ const Login = ({ onLoginSuccess, onBack }) => {
       await sendPasswordResetEmail(auth, email);
       setMessage("Шилтеме почтаңызга жөнөтүлдү.");
     } catch (err) {
-      setError("Email туура эмес!");
+      setError("Email табылган жок!");
     }
   };
 
   return (
+    /* Сиз берген auth-wrapper структурасы */
     <div className={`auth-wrapper ${isForgot ? 'show-forgot' : ''}`} id="authWrapper">
       <div className="form-container">
         
-        {/* ЛОГИН ТАРАПЫ */}
+        {/* КИРҮҮ ТАРАБЫ (Login Side) */}
         <div className="login-side">
-          <div className="back-nav" onClick={onBack}>
+          {/* Артка баскычы сиздин дизайндагыдай */}
+          <div className="back-nav" onClick={() => window.location.reload()}>
             <i className="fa-solid fa-arrow-left"></i>
             <span>Артка</span>
           </div>
+          
           <h1>Кирүү</h1>
           
-          {error && !isForgot && <p className="status-msg-error">{error}</p>}
-          
+          {error && !isForgot && <p style={{color: '#ff4d4d', fontSize: '13px', marginBottom: '10px'}}>{error}</p>}
+
           <form onSubmit={handleLogin}>
             <div className="input-group">
               <i className="fa-regular fa-user"></i>
@@ -81,21 +83,22 @@ const Login = ({ onLoginSuccess, onBack }) => {
           </button>
         </div>
 
-        {/* ПАРОЛДУ КАЛЫБЫНА КЕЛТИРҮҮ ТАРАПЫ */}
+        {/* ПАРОЛДУ УНУТТУМ ТАРАБЫ (Forgot Side) */}
         <div className="forgot-side">
           <div className="back-nav" onClick={() => setIsForgot(false)}>
             <i className="fa-solid fa-arrow-left"></i>
             <span>Артка</span>
           </div>
+          
           <h1>Reset</h1>
           <p style={{ color: '#888', marginBottom: '30px', fontSize: '14px' }}>
             Электрондук почтаңызды жазыңыз, биз сизге шилтеме жөнөтөбүз.
           </p>
 
-          {error && isForgot && <p className="status-msg-error">{error}</p>}
-          {message && <p className="status-msg-success">{message}</p>}
+          {error && isForgot && <p style={{color: '#ff4d4d', fontSize: '13px'}}>{error}</p>}
+          {message && <p style={{color: '#2ecc71', fontSize: '13px'}}>{message}</p>}
           
-          <form onSubmit={handleResetPassword}>
+          <form onSubmit={handleReset}>
             <div className="input-group">
               <i className="fa-regular fa-envelope"></i>
               <input 
@@ -106,12 +109,14 @@ const Login = ({ onLoginSuccess, onBack }) => {
                 required 
               />
             </div>
+            
             <button type="submit" className="action-btn">Шилтеме жөнөтүү</button>
           </form>
         </div>
 
       </div>
 
+      {/* ОҢ ТАРАПТАГЫ WELCOME SIDE */}
       <div className="welcome-side">
         <h2>КОШ КЕЛИҢИЗ!</h2>
         <p>Системаны колдонуу үчүн кирүүңүз керек.</p>
