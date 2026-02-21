@@ -6,10 +6,11 @@ import './css/Login.css';
 const Login = ({ onLoginSuccess, onBack }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isForgot, setIsForgot] = useState(false); // Анимация үчүн статус
+  const [isForgot, setIsForgot] = useState(false); // Анимация үчүн класс алмаштырат
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
+  // Кирүү функциясы
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -22,6 +23,7 @@ const Login = ({ onLoginSuccess, onBack }) => {
     }
   };
 
+  // Паролду калыбына келтирүү
   const handleResetPassword = async (e) => {
     e.preventDefault();
     if (!email) {
@@ -33,18 +35,17 @@ const Login = ({ onLoginSuccess, onBack }) => {
       setMessage("Шилтеме почтаңызга жөнөтүлдү.");
       setError('');
     } catch (err) {
-      setError("Email туура эмес же табылган жок!");
+      setError("Email туура эмес!");
     }
   };
 
   return (
-    <div className="login-page-body">
+    <div className="auth-body">
       <div className={`auth-wrapper ${isForgot ? 'show-forgot' : ''}`}>
         
-        {/* ФОРМАЛАР КОНТЕЙНЕРИ */}
         <div className="form-container">
           
-          {/* КИРҮҮ ФОРМАСЫ */}
+          {/* КИРҮҮ ТАРАПЫ */}
           <div className="login-side">
             <div className="back-nav" onClick={onBack}>
               <i className="fa-solid fa-arrow-left"></i>
@@ -52,11 +53,11 @@ const Login = ({ onLoginSuccess, onBack }) => {
             </div>
             <h1>Кирүү</h1>
             
-            {error && <p className="status-msg error">{error}</p>}
-            
+            {error && !isForgot && <p className="status-msg error">{error}</p>}
+
             <form onSubmit={handleLogin}>
               <div className="input-group">
-                <i className="fa-regular fa-envelope"></i>
+                <i className="fa-regular fa-user"></i>
                 <input 
                   type="email" 
                   placeholder="E-mail" 
@@ -85,7 +86,7 @@ const Login = ({ onLoginSuccess, onBack }) => {
             </button>
           </div>
 
-          {/* КАЛЫБЫНА КЕЛТИРҮҮ ФОРМАСЫ */}
+          {/* ПАРОЛДУ УНУТТУМ ТАРАПЫ */}
           <div className="forgot-side">
             <div className="back-nav" onClick={() => setIsForgot(false)}>
               <i className="fa-solid fa-arrow-left"></i>
@@ -94,7 +95,7 @@ const Login = ({ onLoginSuccess, onBack }) => {
             <h1>Reset</h1>
             <p className="reset-hint">Электрондук почтаңызды жазыңыз, биз сизге шилтеме жөнөтөбүз.</p>
             
-            {error && <p className="status-msg error">{error}</p>}
+            {error && isForgot && <p className="status-msg error">{error}</p>}
             {message && <p className="status-msg success">{message}</p>}
 
             <form onSubmit={handleResetPassword}>
@@ -102,7 +103,7 @@ const Login = ({ onLoginSuccess, onBack }) => {
                 <i className="fa-regular fa-envelope"></i>
                 <input 
                   type="email" 
-                  placeholder="Email жазыңыз" 
+                  placeholder="Email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required 
@@ -119,6 +120,7 @@ const Login = ({ onLoginSuccess, onBack }) => {
           <h2>КОШ КЕЛИҢИЗ!</h2>
           <p>Системаны колдонуу үчүн кирүүңүз керек.</p>
         </div>
+
       </div>
     </div>
   );

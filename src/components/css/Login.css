@@ -1,18 +1,22 @@
-/* Login.css */
-.login-page-body {
+/* 1. НЕГИЗГИ СТИЛДЕР */
+.auth-body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
     background-color: #030308;
     height: 100vh;
     width: 100vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
     overflow: hidden;
     position: fixed;
     top: 0;
     left: 0;
 }
 
+/* 2. БАШКЫ КОНТЕЙНЕР */
 .auth-wrapper {
     width: 100%;
     max-width: 900px;
@@ -27,6 +31,7 @@
     animation: pulseBorder 4s infinite alternate;
 }
 
+/* 3. ФОРМА КОНТЕЙНЕРИ */
 .form-container {
     flex: 1.2;
     position: relative;
@@ -53,11 +58,11 @@
 .auth-wrapper.show-forgot .login-side {
     transform: translateX(-100%);
 }
-
 .auth-wrapper.show-forgot .forgot-side {
     transform: translateX(0);
 }
 
+/* ЭЛЕМЕНТТЕРДИН СТИЛИ */
 .back-nav {
     display: flex;
     align-items: center;
@@ -78,10 +83,10 @@
     color: white;
 }
 
-.login-side h1, .forgot-side h1 {
+.auth-wrapper h1 {
     color: white;
     font-size: 36px;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 
 .input-group {
@@ -118,15 +123,10 @@
     border-radius: 50px;
     color: white;
     font-size: 16px;
-    font-weight: 500;
     cursor: pointer;
     margin-top: 15px;
     transition: 0.3s;
-}
-
-.action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(106, 73, 242, 0.5);
+    text-transform: uppercase;
 }
 
 .forgot-trigger-btn {
@@ -136,7 +136,6 @@
     border: 1px solid #3d2b85;
     border-radius: 50px;
     color: #888;
-    font-size: 13px;
     cursor: pointer;
     margin-top: 20px;
 }
@@ -154,23 +153,19 @@
     padding: 40px;
 }
 
-.status-msg {
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
+.welcome-side h2 { font-size: 38px; font-weight: 800; margin-bottom: 10px; }
 
-.error { background: rgba(255, 0, 0, 0.1); color: #ff4d4d; border: 1px solid #ff4d4d; }
-.success { background: rgba(0, 255, 0, 0.1); color: #2ecc71; border: 1px solid #2ecc71; }
+/* КАТА ЖАНА БИЛДИРҮҮЛӨР */
+.status-msg { font-size: 14px; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
+.error { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); border: 1px solid #ff4d4d; }
+.success { color: #2ecc71; background: rgba(46, 204, 113, 0.1); border: 1px solid #2ecc71; }
+.reset-hint { color: #888; font-size: 14px; margin-bottom: 20px; }
 
-.reset-hint { color: #888; margin-bottom: 25px; font-size: 14px; }
-
-/* 📱 МОБИЛДИК ВЕРСИЯ */
+/* МОБИЛДИК ВЕРСИЯ */
 @media (max-width: 768px) {
-    .auth-wrapper { max-width: 400px; height: 500px; }
+    .auth-wrapper { max-width: 400px; height: 500px; flex-direction: column; }
     .welcome-side { display: none; }
-    .login-side, .forgot-side { padding: 40px 25px; }
+    .login-side, .forgot-side { padding: 40px 30px; }
 }
 
 @keyframes pulseBorder {
