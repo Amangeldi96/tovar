@@ -389,3 +389,68 @@ select::-ms-expand {
   }
 
 }
+
+
+/* Подсказканын стили */
+.ai-suggestion-badge {
+  position: absolute;
+  bottom: 120%; /* Инпуттун бир аз өйдөрөөк жагында */
+  left: 5px;
+  background: rgba(255, 255, 255, 0.9); /* Тунук ак түс */
+  backdrop-filter: blur(10px); /* Артындагы нерселерди бүдөмүктөтүү */
+  color: #1e40af; /* Кочкул көк текст */
+  padding: 6px 14px;
+  border-radius: 20px; /* Сопакай форма */
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+  white-space: nowrap;
+  
+  /* Анимация: ылдыйтан өйдө жумшак калкып чыгуу */
+  animation: floatIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Кичинекей жылтырак белгисинин анимациясы */
+.sparkle-icon {
+  animation: sparkleRotate 2s infinite linear;
+  display: inline-block;
+}
+
+/* Подсказканын жебеси (хвостик) */
+.badge-arrow {
+  position: absolute;
+  top: 100%;
+  left: 20px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(255, 255, 255, 0.9);
+}
+
+/* --- Анимациялар --- */
+
+@keyframes floatIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sparkleRotate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Инпутту жагымдуу кылуу */
+.ai-input {
+  transition: all 0.3s ease;
+}
