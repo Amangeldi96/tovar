@@ -9,7 +9,6 @@
     user-select: none;
 }
 
-/* Экрандын ак болуп калышын ушул жер оңдойт */
 html, body {
     height: 100%;
     width: 100%;
@@ -24,8 +23,8 @@ html, body {
 
 /* 2. БАШКЫ КОНТЕЙНЕР */
 .auth-wrapper {
-    width: 100%;
-    max-width: 900px;
+    width: 95%; /* Мобилдикте экрандын четине тийбеши үчүн */
+    max-width: 900px; /* Десктоптогу туурасы */
     height: 550px;
     background: #0b0b18;
     border-radius: 20px;
@@ -42,9 +41,9 @@ html, body {
     100% { border-color: #6a49f2; box-shadow: 0 0 40px rgba(61, 43, 133, 0.6); }
 }
 
-/* 3. ФОРМА КОНТЕЙНЕРИ */
+/* 3. ФОРМА КОНТЕЙНЕРИ - ТУУРАСЫН ТАКТОО */
 .form-container {
-    flex: 1.2;
+    flex: 1.2; /* Сол тарапка көбүрөөк орун берет */
     position: relative;
     overflow: hidden;
     z-index: 5;
@@ -95,7 +94,7 @@ html, body {
     color: white;
 }
 
-/* 5. ИНПУТТАР (Инпуттун ичи ак болуп калышын оңдоо) */
+/* 5. ИНПУТТАР */
 h1 {
     color: white;
     font-size: 32px;
@@ -105,6 +104,7 @@ h1 {
 .input-group {
     position: relative;
     margin-bottom: 25px;
+    width: 100%; /* Инпуттун туурасы формага жараша */
 }
 
 .input-group i {
@@ -125,7 +125,6 @@ h1 {
     outline: none;
 }
 
-/* Браузердин autocomplete (сары/ак фон) маселесин чечүү */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus {
@@ -163,9 +162,9 @@ input:-webkit-autofill:focus {
     cursor: pointer;
 }
 
-/* 7. ОҢ ЖАГЫ (WELCOME) */
+/* 7. ОҢ ЖАГЫ (WELCOME) - ТУУРАСЫН ТАКТОО */
 .welcome-side {
-    flex: 1;
+    flex: 1; /* Калган бош орунду ээлейт */
     background: linear-gradient(135deg, #0b0b18 20%, #4b2ea3 100%);
     display: flex;
     flex-direction: column;
@@ -175,31 +174,30 @@ input:-webkit-autofill:focus {
     color: white;
     text-align: center;
     padding: 40px;
+    z-index: 10;
 }
 
-/* 8. МОБИЛДИК ВЕРСИЯ (Сүрөттөгү бузулуп жаткан жерди оңдоо) */
+/* 8. МОБИЛДИК ВЕРСИЯ */
 @media (max-width: 768px) {
     .auth-wrapper {
-        max-width: 360px;
+        max-width: 380px;
         height: auto;
-        min-height: 520px; /* Бийиктигин мазмунга жараша кылабыз */
-        flex-direction: column;
-        margin: 20px;
+        min-height: 550px;
+        flex-direction: column; /* Элементтерди тигинен тизет */
     }
 
     .welcome-side {
-        display: none !important; /* Мобилдикте оң жагы таптакыр өчөт */
+        display: none !important; /* Форманы жаап калбашы үчүн өчүрөбүз */
     }
 
     .form-container {
         flex: none;
         width: 100%;
-        height: 520px; /* Форма туруктуу бийиктикте болот */
+        height: 550px;
     }
 
     .login-side, .forgot-side {
         padding: 40px 25px;
+        width: 100%;
     }
-
-    h1 { font-size: 26px; }
 }
