@@ -156,7 +156,7 @@ const AdminPanel = ({ onBack }) => {
     const isExactDuplicate = products.some(p => p.name.toLowerCase() === formData.name.toLowerCase() && p.mainCategory === formData.mainCategory);
     
     if (isExactDuplicate) {
-      setDuplicateError(`Ката! "${formData.name}" базада мурунтан бар!`);
+      setDuplicateError(`"${formData.name}" Базада бар!`);
       setTimeout(() => setDuplicateError(""), 4000);
       return;
     }
