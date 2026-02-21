@@ -59,9 +59,9 @@ const AdminPanel = ({ onBack }) => {
 
   const detectSubCategory = async (productName) => {
   if (productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
-
+console.log("2. Токтотулду: Категория тандалган эмес же ат өтө кыска.");
   try {
-    // OpenAI дарегинин ордуна өзүбүздүн сервердик функцияга кайрылабыз
+    console.log("3. Серверге сурам кетти...");
     const response = await fetch("/api/classify", {
       method: "POST",
       headers: {
