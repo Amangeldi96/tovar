@@ -753,66 +753,190 @@ td:last-child {
 
 
 
-/* Подсказканын жалпы контейнери */
-.autocomplete-dropdown {
-  position: absolute;
-  top: 100%; /* Инпуттун так астына чыгат */
-  left: 0;
-  right: 0;
-  background-color: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 9999; /* Башка элементтердин үстүндө көрүнүшү үчүн */
-  margin-top: 4px;
-  max-height: 250px;
-  overflow-y: auto;
-  padding: 5px 0;
+/* Жалпы контейнер */
+.app-container {
+  background-color: #f8fafc;
+  min-height: 100vh;
+  padding-bottom: 80px; /* Footer үчүн орун */
+  font-family: 'Inter', sans-serif;
 }
 
-/* Ар бир товардын стили */
+/* Карточкалардын стили */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #f1f5f9;
+}
+
+/* Форманын торчосу (ПК үчүн 1 сап, Мобилдик үчүн мамыча) */
+.form-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  gap: 12px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Инпуттардын жалпы стили */
+input[type="text"],
+input[type="number"],
+.custom-select-trigger {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  outline: none;
+  background-color: #ffffff;
+}
+
+input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- ПОДСКАЗКА (AUTOCOMPLETE) СТИЛИ --- */
+.autocomplete-dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  padding: 6px;
+}
+
 .autocomplete-item {
-  padding: 10px 15px;
+  padding: 12px 16px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: background-color 0.2s ease;
+  border-radius: 8px;
+  transition: background 0.2s;
 }
 
-/* Чычканды үстүнө алып барганда же тандаганда */
 .autocomplete-item:hover {
   background-color: #f1f5f9;
 }
 
-/* Товардын аты */
 .autocomplete-item span {
-  font-size: 14px;
+  font-weight: 500;
   color: #1e293b;
+  font-size: 14px;
+}
+
+.autocomplete-item small {
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* Таблицанын стили */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th {
+  background-color: #f8fafc;
+  color: #64748b;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px;
+  font-size: 13px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  color: #334155;
+}
+
+/* "Кошуу" баскычы */
+.btn-add {
+  background-color: #2563eb;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.btn-add:hover {
+  background-color: #1d4ed8;
+}
+
+/* Өчүрүү баскычы (X) */
+.btn-delete-row {
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Footer (ИТОГО) */
+.fixed-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-top: 1.5px solid #e2e8f0;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: center;
+  z-index: 900;
+}
+
+.footer-content {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.footer-label {
+  font-size: 16px;
+  color: #64748b;
   font-weight: 500;
 }
 
-/* Товардын баасы (кичинекей текст менен) */
-.autocomplete-item small {
-  font-size: 12px;
-  color: #64748b;
-  background-color: #f8fafc;
-  padding: 2px 6px;
-  border-radius: 4px;
-  border: 1px solid #e2e8f0;
-}
-
-/* Скроллборду сулуулоо (кошумча) */
-.autocomplete-dropdown::-webkit-scrollbar {
-  width: 6px;
-}
-
-.autocomplete-dropdown::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 10px;
-}
-
-/* Эгер инпут форманын ичинде болсо, контейнерге position: relative берүү маанилүү */
-.form-grid > div {
-  position: relative;
+.footer-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1e293b;
 }
