@@ -7,7 +7,7 @@ import Sidebar from './Sidebar.jsx';
  */
 const UnitSelect = ({ value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const options = ['кг', 'шт','метр','пач','мешок'];
+  const options = ['кг', 'шт', 'метр', 'пач', 'мешок', 'м²'];
 
   return (
     <div className="custom-select-wrapper">

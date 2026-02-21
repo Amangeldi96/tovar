@@ -276,7 +276,7 @@ const detectSubCategory = async (productName) => {
             </div>
             {unitOpen && (
               <div className="custom-dropdown-menu">
-                {['кг', 'шт','метр','пач','мешок'].map(item => (
+                {['кг', 'шт', 'метр', 'пач', 'мешок', 'м²'].map(item => (
                   <div key={item} className="dropdown-option" onClick={() => { setFormData({...formData, unit: item}); setUnitOpen(false); }}>{item}</div>
                 ))}
               </div>
