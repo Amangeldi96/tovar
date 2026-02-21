@@ -9,8 +9,12 @@ const styles = {
   modalContent: { background: 'white', padding: '30px', borderRadius: '15px', textAlign: 'center', width: '320px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' },
   cancelBtn: { flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid #ddd', cursor: 'pointer', background: '#f5f5f5', fontWeight: 'bold' },
   confirmBtn: { flex: 1, padding: '12px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: '#dc3545', color: 'white', fontWeight: 'bold' },
-  // Жаңы эскертүү стили
-  alertToast: { position: 'fixed', top: '20px', right: '20px', background: '#ff4d4f', color: 'white', padding: '15px 25px', borderRadius: '10px', boxShadow: '0 5px 15px rgba(0,0,0,0.2)', zIndex: 10001, fontWeight: 'bold', animation: 'slideIn 0.3s ease-out' }
+  alertToast: { 
+    position: 'fixed', top: '20px', left: '50%', transform: 'translateX(-50%)', 
+    background: '#ff4d4f', color: 'white', padding: '12px 25px', borderRadius: '12px', 
+    boxShadow: '0 10px 25px rgba(220, 53, 69, 0.4)', zIndex: 10001, fontWeight: 'bold', 
+    display: 'flex', alignItems: 'center', gap: '10px', animation: 'slideInDown 0.4s ease-out' 
+  }
 };
 
 const AdminPanel = ({ onBack }) => {
@@ -26,7 +30,7 @@ const AdminPanel = ({ onBack }) => {
   const [unitOpen, setUnitOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
-  const [duplicateError, setDuplicateError] = useState(""); // Жаңы статус
+  const [duplicateError, setDuplicateError] = useState("");
 
   const [formData, setFormData] = useState({
     mainCategory: 'Тандаңыз...',
@@ -41,23 +45,50 @@ const AdminPanel = ({ onBack }) => {
       const q = query(collection(db, "all_products"), orderBy("timestamp", "desc"));
       const querySnapshot = await getDocs(q);
       setProducts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    } catch (e) {
-      console.error("Продукцияларды алууда ката:", e);
-    }
+    } catch (e) { console.error(e); }
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        fetchProducts();
-      } else {
-        setUser(null);
-      }
+      if (currentUser) { setUser(currentUser); fetchProducts(); } 
+      else { setUser(null); }
       setAuthLoading(false);
     });
     return () => unsubscribe();
   }, []);
+
+  // AI аркылуу товардын маанисин текшерүү (Дубликатты аныктоо)
+  const checkDuplicateWithAI = async (newName) => {
+    // Учурдагы товарлардын тизмесин текст катары даярдоо
+    const existingList = products.map(p => p.name).join(", ");
+    if (!existingList) return "UNIQUE";
+
+    try {
+      const response = await fetch("/api/classify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            { 
+              role: "system", 
+              content: `Сен базадагы товарларды кайталануудан коргоочу жардамчысың. 
+              Эгер жаңы товар базада бар товардын синоними болсо же мааниси 100% бирдей болсо (мисалы: "Цемент м400" жана "м400 цементи"), ГАНА "DUPLICATE" деп жооп бер.
+              Бирок цифралары же параметрлери башка болсо (мисалы: "Турба 100" жана "Турба 70"), "UNIQUE" деп жооп бер.
+              Жооп 1 сөз: DUPLICATE же UNIQUE.` 
+            },
+            { role: "user", content: `Базада: [${existingList}]. Жаңы товар: "${newName}"` }
+          ],
+          temperature: 0
+        })
+      });
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content?.trim() || "UNIQUE";
+    } catch (err) {
+      console.error("AI Check Error:", err);
+      return "UNIQUE"; // Ката чыкса өткөрүп ийет
+    }
+  };
 
   const detectSubCategory = async (productName) => {
     if (!productName || productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
@@ -68,7 +99,7 @@ const AdminPanel = ({ onBack }) => {
         body: JSON.stringify({
           model: "gpt-4o-mini",
           messages: [
-            { role: "system", content: `Сен товарларды классификациялоочу адиссиң. Товардын атына карап, анын ички категориясын ГАНА 1 сөз менен аныкта.` },
+            { role: "system", content: "Товардын атына карап, анын ички категориясын ГАНА 1 сөз менен аныкта." },
             { role: "user", content: `Категория: ${formData.mainCategory}. Товар: "${productName}"` }
           ],
           temperature: 0.1
@@ -79,9 +110,7 @@ const AdminPanel = ({ onBack }) => {
         const detected = data.choices[0].message.content.trim().replace(/[.]/g, "");
         setFormData(prev => ({ ...prev, subCategory: detected }));
       }
-    } catch (err) {
-      console.error("Fetch учурунда ката чыкты:", err.message);
-    }
+    } catch (err) { console.error(err); }
   };
 
   const handleSave = async () => {
@@ -89,19 +118,19 @@ const AdminPanel = ({ onBack }) => {
       return alert("Маалыматты толук киргизиңиз!");
     }
 
-    // --- ТЕКШЕРҮҮ: Товар базада барбы? ---
-    const isDuplicate = products.some(p => 
-      p.name.toLowerCase().replace(/\s/g, '') === formData.name.toLowerCase().replace(/\s/g, '')
-    );
+    setLoading(true);
 
-    if (isDuplicate) {
-      setDuplicateError(`"${formData.name}" базада мурунтан бар!`);
-      setTimeout(() => setDuplicateError(""), 3000); // 3 сек кийин өчүрүү
+    // 1-кадам: AI аркылуу маанисин текшерүү
+    const aiDecision = await checkDuplicateWithAI(formData.name);
+
+    if (aiDecision === "DUPLICATE") {
+      setDuplicateError(`"${formData.name}" базада мурунтан бар (же синоними бар)!`);
+      setLoading(false);
+      setTimeout(() => setDuplicateError(""), 4000);
       return;
     }
-    // ------------------------------------
 
-    setLoading(true);
+    // 2-кадам: Базага сактоо
     try {
       await addDoc(collection(db, "all_products"), { 
         ...formData, 
@@ -117,6 +146,7 @@ const AdminPanel = ({ onBack }) => {
     }
   };
 
+  // ... (handleDelete, confirmDelete, handleLogin, handleExit калган функциялар өзгөрүүсүз калат)
   const handleDelete = async () => {
     if (productToDelete) {
       try {
@@ -172,10 +202,10 @@ const AdminPanel = ({ onBack }) => {
 
   return (
     <div className="admin-container">
-      {/* ДУБЛИКАТ ЭСКЕРТҮҮСҮ */}
+      {/* СТИЛДҮҮ AI ЭСКЕРТҮҮСҮ */}
       {duplicateError && (
         <div style={styles.alertToast}>
-          ❌ {duplicateError}
+          <span>🚫</span> {duplicateError}
         </div>
       )}
 
@@ -226,7 +256,6 @@ const AdminPanel = ({ onBack }) => {
                 <div className="badge-tail"></div>
               </div>
             )}
-
             <input 
               type="text" 
               className={`modern-input ${formData.subCategory && formData.name ? 'input-active' : ''}`}
@@ -235,9 +264,7 @@ const AdminPanel = ({ onBack }) => {
               onChange={(e) => {
                 const val = e.target.value;
                 setFormData({ ...formData, name: val });
-                if (val === '') {
-                  setFormData(prev => ({ ...prev, name: '', subCategory: '' }));
-                }
+                if (val === '') { setFormData(prev => ({ ...prev, name: '', subCategory: '' })); }
               }} 
               onBlur={(e) => detectSubCategory(e.target.value)} 
             />
@@ -265,6 +292,7 @@ const AdminPanel = ({ onBack }) => {
         </div>
       </div>
 
+      {/* Таблица бөлүгү өзгөрүүсүз калат */}
       <div className="table-wrapper">
         <table className="modern-table">
           <thead>
