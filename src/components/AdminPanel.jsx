@@ -61,8 +61,15 @@ const AdminPanel = ({ onBack }) => {
     const id = Date.now();
     const config = {
       success: { bg: '#2ecc71', icon: '✅' },
-      error: { bg: '#ff1900', icon: '<svg fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2ZM11,7a1,1,0,0,1,2,0v6a1,1,0,0,1-2,0Zm1,12a1.5,1.5,0,1,1,1.5-1.5A1.5,1.5,0,0,1,12,19Z"></path></g></svg>' },
-      info: { bg: '#ff9100', icon: '🗑️' }
+      error: { bg: '#ff1900', icon: '🚫' },
+      info: { 
+  bg: '#ff9100', 
+  icon: (
+    <svg fill="#ff0000" viewBox="0 0 24 24" id="delete-alt" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color" stroke="#ff0000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M16,7V4a1,1,0,0,0-1-1H9A1,1,0,0,0,8,4V7m2,4v6m4-6v6" style="fill: none; stroke: #f38686; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path>
+		<path id="primary" d="M4,7H20M18,20V7H6V20a1,1,0,0,0,1,1H17A1,1,0,0,0,18,20Z" style="fill: none; stroke: #fe3939; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g>
+		</svg>
+  )
+}
     };
     
     const { bg, icon } = config[type] || config.success;
