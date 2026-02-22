@@ -533,7 +533,6 @@ th, td, label, h1, h2, .total-box, .cat-btn, .logo {
 
 /* Көк кнопка ачылганда продукттарды дагы бир аз оңго жылдыруу */
 .cat-group.active > .product-list-accordion > .accordion-inner {
-    border: 1px solid var(--border);
     border-top: none;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
@@ -766,68 +765,108 @@ td:last-child {
 
 
 
-/* 1. Контейнер - подсказка инпуттун астында турушу үчүн сөзсүз керек */
+/* ============================= */
+/* Контейнер */
+/* ============================= */
 .form-grid > div {
   position: relative;
 }
 
-/* 2. Подсказканын терезеси (Dropdown) */
+/* ============================= */
+/* Dropdown */
+/* ============================= */
 .autocomplete-dropdown {
   position: absolute;
-  top: 100%; /* Инпуттун так астына жабышат */
+  top: calc(100% + 6px);
   left: 0;
   right: 0;
+
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); /* Көлөкө - терезени бөлүп көрсөтөт */
-  z-index: 1000;
-  margin-top: 5px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+
+  z-index: 3000;
   max-height: 250px;
   overflow-y: auto;
-  border: 1px solid #e2e8f0;
-  padding: 5px;
+
+  padding: 6px 4px;
+
+  box-sizing: border-box;
+  scrollbar-gutter: stable;
+
+  /* smooth animation */
+  opacity: 0;
+  transform: translateY(-4px);
+  animation: dropdownFade 0.15s ease forwards;
 }
 
-/* 3. Ар бир товардын сабы */
+@keyframes dropdownFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================= */
+/* Item */
+/* ============================= */
 .autocomplete-item {
-  padding: 10px 15px;
+  padding: 11px 14px;
   cursor: pointer;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 8px;
-  transition: background 0.2s ease;
-  margin-bottom: 2px;
+
+  border-radius: 10px;
+  transition: all 0.18s ease;
+
+  min-width: 0; /* текст кысылбасын */
 }
 
-/* Чычканды үстүнө алып барганда */
-.autocomplete-item:hover {
-  background-color: #f1f5f9;
-}
-
-/* Товардын аты */
+/* Текст толук чыксын */
 .autocomplete-item span {
   font-weight: 500;
-  color: #1e293b;
+  color: #1f2937;
   font-size: 14px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Товардын баасы (көк түстөгү бөлүнүп турган текст) */
+/* Баа */
 .autocomplete-item small {
+  flex-shrink: 0;
+  margin-left: 10px;
+
   color: #2563eb;
   background: #eff6ff;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 4px 8px;
+  border-radius: 7px;
   font-weight: 600;
   font-size: 12px;
   border: 1px solid #dbeafe;
 }
 
-/* Скроллду ичке жана сулуу кылуу */
-.autocomplete-dropdown::-webkit-scrollbar {
-  width: 5px;
+/* Hover */
+.autocomplete-item:hover {
+  background: #f1f5f9;
 }
-.autocomplete-dropdown::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 10px;
+
+/* ============================= */
+/* Scrollbar толук жашыруу */
+/* ============================= */
+
+/* Chrome, Safari */
+.autocomplete-dropdown::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.autocomplete-dropdown {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
