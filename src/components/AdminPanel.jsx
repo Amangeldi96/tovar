@@ -301,7 +301,7 @@ const AdminPanel = ({ onBack }) => {
             </div>
             {catOpen && (
               <div className="custom-dropdown-menu">
-                {['Строй материал', 'Хоз товар', 'Сантехника', 'Электроника', 'ПВХ жана Алюминий', 'Автозапчасти'].map(item => (
+                {['Строй материал', 'Хоз товар', 'Сантехника', 'Электроника', 'ПВХ жана Алюминий', 'Автозапчасти', 'Электричество'].map(item => (
                   <div key={item} className="dropdown-option" onClick={() => { setFormData({...formData, mainCategory: item}); setCatOpen(false); }}>{item}</div>
                 ))}
               </div>
