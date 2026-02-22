@@ -9,6 +9,7 @@
             --radius: 12px;
         }
 
+
         body {
             margin: 0;
             font-family: 'Inter', system-ui, sans-serif;
@@ -17,6 +18,9 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+						overflow-x: hidden; /* горизонталдык scroll өчүрүлөт */
+ 					  max-width: 100vw;
+            width: 100%;
         }
 /* Текстти белгилегендеги (выделение) эффект */
 ::selection {
@@ -37,10 +41,10 @@
         .header-btns { display: flex; gap: 10px; }
 
         /* Main Layout */
-        .main-layout { display: grid; grid-template-columns: 280px 1fr; flex: 1; overflow: hidden; }
+        .main-layout { display: grid; grid-template-columns: 280px 1fr; flex: 1;}
         
-        /* Sidebar & Search */
-        .sidebar { background: #fff; border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; }
+
+        
         .search-container { margin-bottom: 20px; position: sticky; top: 0; background: #fff; z-index: 10; }
         .search-input { 
             width: 100%; padding: 10px 12px; border: 1px solid var(--border); 
@@ -171,10 +175,6 @@
         size: auto;
     }
 
-    /* Экрандагы бардык интерфейсти жашыруу */
-    body * {
-        visibility: hidden;
-    }
 
     /* Принт аймагын гана көрсөтүү */
     #print-area, #print-area * {
@@ -201,6 +201,13 @@
         visibility: visible;
     }
 
+		.p-table tr.total-row td:first-child {
+        text-align: center; /* Текстти (ИТОГО) ортолоо */
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
     /* Таблицанын стилдери */
     .p-table {
         width: 100%;
@@ -208,26 +215,45 @@
         margin-top: 10px;
     }
 
-    .p-table th, .p-table td {
-        border: 1px solid #000 !important; /* Чек аралар даана кара болот */
-        padding: 10px;
+   .p-table th, .p-table td {
+        border: 1px solid #000 !important; /* Даана кара чек ара */
+        padding: 10px 5px;
         text-align: center;
         font-size: 12pt;
         color: #000 !important;
+        word-wrap: break-word;
     }
 
-    /* Итого сабын оңго түздөө */
-    .p-table tr td[colspan="5"] {
-        text-align: right;
+    /* Баш сөздөрдү (thead) боз кылуу (кааласаңыз) же жөн эле калың кылуу */
+    .p-table th {
+        background-color: #f2f2f2 !important;
+        -webkit-print-color-adjust: exact;
         font-weight: bold;
     }
 
-    /* Башка эч нерсе чыкпасын */
-    .header, .main-layout, .sidebar, .content, button, .card, .fixed-footer, .modal-overlay, .toast-container {
+    /* 6. МИНЕ УШУЛ ЖЕР СИЗ КӨРГӨН СҮРӨТТӨГҮДӨЙ КЫЛАТ */
+    /* "ИТОГО" жазуусу турган ячейканы ортолоо */
+    .p-table tr td[colspan="5"] {
+        text-align: center !important; /* Текст так ортодо болот */
+        font-weight: bold !important;
+        text-transform: uppercase;   /* Чоң тамгалар менен */
+        font-size: 13pt;
+        letter-spacing: 2px;         /* Тамгалардын арасы бир аз ачык */
+    }
+
+    /* Сумма турган акыркы ячейканы калың кылуу */
+    .p-table tr td:last-child {
+        font-weight: bold !important;
+        font-size: 13pt;
+        text-align: center !important;
+    }
+
+    /* 7. Башка эч нерсе баракка чыкпашы үчүн кепилдик */
+    .header, .main-layout, .sidebar, .content, button, .card, 
+    .fixed-footer, .modal-overlay, .toast-container, .mobile-menu-btn {
         display: none !important;
     }
 }
-
 
 /* Footer кнопкалар default жашыруун */
 .fixed-footer .btn-word,
@@ -257,25 +283,39 @@
         display: none;
     }
 
-    /* Sidebar overlay режим */
-    .sidebar {
-        position: fixed;
-        left: -100%;
-        top: 0;
-        height: 100%;
-        width: 260px;
-        background: #fff;
-        z-index: 4000;
-        transition: 0.3s;
-    }
+.main-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    /* Барактын бийиктигинен Header'ди алып салгандагы калган бөлүк */
+    height: calc(100vh - 64px); /* 64px - бул сиздин Header'дин бийиктиги */
+    overflow: hidden; /* Бүтүндөй барак скролл болбошу үчүн */
+}
+
+/* ================= SIDEBAR GENERAL ================= */
+.sidebar {
+    background: #fff;
+    border-right: 1px solid var(--border);
+    padding: 8px; 
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+/* ===== SIDEBAR SCROLL FIX ===== */
+.sidebar {
+    height: 100vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+.main-layout {
+    min-height: 0;
+}
 
     .sidebar.active {
         left: 0;
     }
 
-    .main-layout {
-        grid-template-columns: 1fr;
-    }
 
     .fixed-footer {
         left: 0 !important;
@@ -288,6 +328,7 @@
     }
 
     .content {
+			overflow-x: hidden !important;
         padding-bottom: 120px;
     }
 }
@@ -373,12 +414,7 @@ td, th, h2, label, .total-box {
 
 
 /* 1. Жалпы барактагы тексттерди белгилөөнү өчүрүү */
-body {
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none;     /* IE 10+ */
-    user-select: none;         /* Калган браузерлер */
-		caret-color: transparent;
-}
+
 
 /* 2. Таблицанын ичиндеги маалыматтарды көчүрүү керек болушу мүмкүн, 
       ошондуктан аларга гана уруксат беребиз */
@@ -408,10 +444,6 @@ button,
 }
 
 /* 4. Сиз мурун жазган белгилөө түсүн (selection background) өчүрүп салабыз же тууралайбыз */
-::selection {
-    background: transparent; /* Же өтө эле керек болсо: rgba(0, 123, 255, 0.2); */
-    color: inherit;
-}
 
 input, textarea {
     caret-color: auto; /* Инпуттун ичинде сызыкча кайра көрүнөт */
@@ -639,34 +671,35 @@ th, td, label, h1, h2, .total-box, .cat-btn, .logo {
 
 
 
-/* ӨЧҮРҮҮ БАСКЫЧЫ (X) - ЭҢ АЯГЫНА КОШУҢУЗ */
-.delete-row-btn {
-    background: transparent !important; /* Фонду такыр жок кылуу */
-    border: none !important;             /* Рамка жок */
-    color: #ff4d4f !important;           /* Таза кызыл түс */
-    font-size: 20px !important;          /* Өлчөмү даана */
-    font-weight: 900 !important;          /* Калың */
-    cursor: pointer !important;          /* Колдун белгиси */
-    padding: 0 10px !important;          /* Басканга ыңгайлуу аймак */
-    line-height: 1 !important;           /* Текстти вертикалдык түздөө */
-    display: inline-block !important;    /* Көрүнөө болушу үчүн */
-    transition: transform 0.2s ease, opacity 0.2s ease !important;
-    outline: none !important;            /* Басканда көк алкак чыкпайт */
-    
-    /* Текстти белгилөөгө жол бербөө (стилди бузбаш үчүн) */
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-tap-highlight-color: transparent !important;
+/* ӨЧҮРҮҮ БАСКЫЧЫН КАЛЫБЫНА КЕЛТИРҮҮ */
+.btn-delete-row {
+    background: #fee2e2 !important; /* Назик кызыл фон */
+    border: none !important;
+    color: #ef4444 !important;      /* Каныккан кызыл "X" */
+    font-size: 18px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;  /* Бурчтары тегеректелген */
+    transition: all 0.2s ease !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    outline: none !important;
 }
 
-/* Чычканды үстүнө алып барганда же баскандагы эффекттер */
-.delete-row-btn:hover {
-    opacity: 0.6 !important;
-    transform: scale(1.2) !important;
+/* Чычканды үстүнө алып барганда фон өзгөрөт */
+.btn-delete-row:hover {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    transform: scale(1.1);
 }
 
-.delete-row-btn:active {
-    transform: scale(0.9) !important;
+.btn-delete-row:active {
+    transform: scale(0.9);
 }
 
 /* ТАБЛИЦАДАГЫ ЯЧЕЙКАНЫН ТҮЗДӨЛҮШҮ */
@@ -681,192 +714,75 @@ td:last-child {
 
 
 
-
-/* Custom Select Styles */
-.custom-select-wrapper {
-  position: relative;
-  width: 100%;
-  cursor: pointer;
-}
-
-.custom-select-trigger {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 10px 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  transition: all 0.2s;
-}
-
-.custom-select-trigger.open {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-}
-
-.arrow {
-  border: solid #64748b;
-  border-width: 0 2px 2px 0;
-  display: inline-block;
-  padding: 3px;
-  transition: transform 0.2s;
-}
-
-.arrow.down { transform: rotate(45deg); }
-.arrow.up { transform: rotate(-135deg); }
-
-.select-dropdown {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  overflow: hidden;
-}
-
-.select-option {
-  padding: 10px 15px;
-  font-size: 14px;
-  color: #1e293b;
-  transition: background 0.2s;
-}
-
-.select-option:hover {
-  background-color: #f1f5f9;
-}
-
-/* Сүрөттөгүдөй көк түс */
-.select-option.selected {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.select-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 999;
-}
-
-.btn-delete-row {
-  background: none;
-  border: none;
-  color: #ef4444;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-
-
-
-
-/* ============================= */
-/* Контейнер */
-/* ============================= */
+/* Ата-энелик блокту чектөөдөн бошотобуз */
+/* Инпуттун контейнери подсказканы кесип салбашы керек */
 .form-grid > div {
-  position: relative;
+    position: relative !important;
+    overflow: visible !important;
 }
 
-/* ============================= */
-/* Dropdown */
-/* ============================= */
+/* Подсказканын өзү */
 .autocomplete-dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  right: 0;
-
-  background: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #e5e7eb;
-
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-
-  z-index: 3000;
-  max-height: 250px;
-  overflow-y: auto;
-
-  padding: 6px 4px;
-
-  box-sizing: border-box;
-  scrollbar-gutter: stable;
-
-  /* smooth animation */
-  opacity: 0;
-  transform: translateY(-4px);
-  animation: dropdownFade 0.15s ease forwards;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    z-index: 9999 !important; /* Баарынан өйдө турат */
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
 }
 
-@keyframes dropdownFade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Chrome/Safari үчүн скроллду жашыруу */
+.no-scrollbar::-webkit-scrollbar {
+    display: none !important;
 }
 
-/* ============================= */
-/* Item */
-/* ============================= */
 .autocomplete-item {
-  padding: 11px 14px;
-  cursor: pointer;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  border-radius: 10px;
-  transition: all 0.18s ease;
-
-  min-width: 0; /* текст кысылбасын */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.2s;
 }
 
-/* Текст толук чыксын */
+.autocomplete-item:hover {
+    background: #f8fafc;
+}
+
 .autocomplete-item span {
-  font-weight: 500;
-  color: #1f2937;
-  font-size: 14px;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Баа */
 .autocomplete-item small {
   flex-shrink: 0;
-  margin-left: 10px;
-
   color: #2563eb;
   background: #eff6ff;
-  padding: 4px 8px;
-  border-radius: 7px;
+  padding: 3px 8px;
+  border-radius: 6px;
   font-weight: 600;
   font-size: 12px;
   border: 1px solid #dbeafe;
 }
 
-/* Hover */
 .autocomplete-item:hover {
   background: #f1f5f9;
 }
 
-/* ============================= */
-/* Scrollbar толук жашыруу */
-/* ============================= */
-
-/* Chrome, Safari */
-.autocomplete-dropdown::-webkit-scrollbar {
-  display: none;
-}
-
-/* Firefox */
-.autocomplete-dropdown {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+/* === Анимация === */
+@keyframes dropdownFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

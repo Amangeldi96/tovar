@@ -205,26 +205,34 @@ const MainContent = () => {
           <div className="card">
             <div className="form-grid">
               
-              {/* ПОДСКАЗКА МЕНЕН INPUT */}
-              <div style={{ position: 'relative' }}>
-                <input 
-                  type="text" 
-                  value={formData.name} 
-                  onChange={handleNameChange} 
-                  placeholder="Материал" 
-                  autoComplete="off"
-                />
-                {suggestions.length > 0 && (
-                  <div className="autocomplete-dropdown">
-                    {suggestions.map((p, i) => (
-                      <div key={i} className="autocomplete-item" onClick={() => selectSuggestion(p)}>
-                        <span>{p.name}</span>
-                        <small>{p.price} сом</small>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+             {/* ПОДСКАЗКА МЕНЕН INPUT */}
+<div className="form-item" style={{ position: 'relative', overflow: 'visible' }}>
+  <input 
+    type="text" 
+    value={formData.name} 
+    onChange={handleNameChange} 
+    placeholder="Материал" 
+    autoComplete="off"
+    onBlur={() => setTimeout(() => setSuggestions([]), 200)} // Инпуттан чыкканда жабылат
+  />
+  {suggestions.length > 0 && (
+    <div className="autocomplete-dropdown no-scrollbar">
+      {suggestions.map((p, i) => (
+        <div 
+          key={i} 
+          className="autocomplete-item" 
+          onMouseDown={(e) => {
+            e.preventDefault(); // Тандаганда инпут фокусун жоготпошу үчүн
+            selectSuggestion(p);
+          }}
+        >
+          <span>{p.name}</span>
+          <small>{p.price} сом</small>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
               <UnitSelect 
                 value={formData.unit} 
