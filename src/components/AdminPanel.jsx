@@ -9,25 +9,10 @@ const styles = {
   modalContent: { background: 'white', padding: '30px', borderRadius: '15px', textAlign: 'center', width: '320px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' },
   cancelBtn: { flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid #ddd', cursor: 'pointer', background: '#f5f5f5', fontWeight: 'bold' },
   confirmBtn: { flex: 1, padding: '12px', borderRadius: '8px', border: 'none', cursor: 'pointer', background: '#dc3545', color: 'white', fontWeight: 'bold' },
-  
-  // ЖАҢЫ: Уведомлениелер үчүн контейнер жана стилдер
-  notificationContainer: {
-    position: 'fixed', top: '20px', right: '20px', zIndex: 10005, display: 'flex', flexDirection: 'column', gap: '10px'
-  },
-  toast: {
-    padding: '14px 24px', borderRadius: '12px', color: 'white', fontWeight: '600', 
-    boxShadow: '0 8px 20px rgba(0,0,0,0.15)', minWidth: '280px', display: 'flex', 
-    alignItems: 'center', gap: '12px', animation: 'slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-  },
-
-  suggestionBox: {
-    position: 'absolute', top: '100%', left: 0, width: '100%', background: 'white',
-    borderRadius: '8px', boxShadow: '0 5px 15px rgba(0,0,0,0.2)', zIndex: 100,
-    maxHeight: '200px', overflowY: 'auto', border: '1px solid #eee', marginTop: '5px'
-  },
-  suggestionItem: {
-    padding: '10px', borderBottom: '1px solid #f0f0f0', cursor: 'pointer', textAlign: 'left', fontSize: '13px'
-  }
+  notificationContainer: { position: 'fixed', top: '20px', right: '20px', zIndex: 10005, display: 'flex', flexDirection: 'column', gap: '10px' },
+  toast: { padding: '14px 24px', borderRadius: '12px', color: 'white', fontWeight: '600', boxShadow: '0 8px 20px rgba(0,0,0,0.15)', minWidth: '280px', display: 'flex', alignItems: 'center', gap: '12px', animation: 'slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' },
+  suggestionBox: { position: 'absolute', top: '100%', left: 0, width: '100%', background: 'white', borderRadius: '8px', boxShadow: '0 5px 15px rgba(0,0,0,0.2)', zIndex: 100, maxHeight: '200px', overflowY: 'auto', border: '1px solid #eee', marginTop: '5px' },
+  suggestionItem: { padding: '10px', borderBottom: '1px solid #f0f0f0', cursor: 'pointer', textAlign: 'left', fontSize: '13px' }
 };
 
 const AdminPanel = ({ onBack }) => {
@@ -43,8 +28,6 @@ const AdminPanel = ({ onBack }) => {
   const [unitOpen, setUnitOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
-  
-  // ЖАҢЫ: Уведомлениелердин тизмесин сактоочу state
   const [notifications, setNotifications] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
 
@@ -56,7 +39,6 @@ const AdminPanel = ({ onBack }) => {
     unit: 'кг'
   });
 
-// Категориялар үчүн кооз SVG иконкалар
   const Icons = {
     Success: () => (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -83,19 +65,12 @@ const AdminPanel = ({ onBack }) => {
     const config = {
       success: { bg: '#2ecc71', icon: <Icons.Success /> },
       error: { bg: '#ff0040', icon: <Icons.Error /> },
-      info: { bg: '#2ecc71', icon: <Icons.Info /> }
+      info: { bg: '#3498db', icon: <Icons.Info /> }
     };
-    
     const { bg, icon } = config[type] || config.success;
-    
     setNotifications(prev => [...prev, { id, msg, bg, icon }]);
-    
-    setTimeout(() => {
-      setNotifications(prev => prev.filter(n => n.id !== id));
-    }, 4000);
+    setTimeout(() => setNotifications(prev => prev.filter(n => n.id !== id)), 4000);
   };
-
-	
 
   const fetchProducts = async () => {
     try {
@@ -113,6 +88,61 @@ const AdminPanel = ({ onBack }) => {
     });
     return () => unsubscribe();
   }, []);
+
+  // OpenAI сурамдары үчүн негизги жардамчы функция
+  const callOpenAI = async (messages) => {
+    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    if (!apiKey) {
+      console.error("API Key табылган жок!");
+      return null;
+    }
+
+    try {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: messages,
+          temperature: 0.1
+        })
+      });
+
+      if (!response.ok) throw new Error("API жооп берген жок");
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content?.trim() || "";
+    } catch (err) {
+      console.error("OpenAI Error:", err);
+      return null;
+    }
+  };
+
+  const checkDuplicateWithAI = async (newName) => {
+    const existingList = products.map(p => p.name).join(", ");
+    if (!existingList) return "UNIQUE";
+    const messages = [
+      { role: "system", content: "Сен базадагы товарларды кайталануудан коргоочу жардамчысың. Эгер жаңы товар базада бар товардын синоними болсо же мааниси 100% бирдей болсо, ГАНА 'DUPLICATE' деп жооп бер. Жооп 1 сөз: DUPLICATE же UNIQUE." },
+      { role: "user", content: `Базада: [${existingList}]. Жаңы товар: "${newName}"` }
+    ];
+    const result = await callOpenAI(messages);
+    return result || "UNIQUE";
+  };
+
+  const detectSubCategory = async (productName) => {
+    if (!productName || productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
+    const messages = [
+      { role: "system", content: "Товардын атына карап, анын ички категориясын ГАНА 1 сөз менен аныкта." },
+      { role: "user", content: `Категория: ${formData.mainCategory}. Товар: "${productName}"` }
+    ];
+    const detected = await callOpenAI(messages);
+    if (detected) {
+      const cleaned = detected.replace(/[.]/g, "");
+      setFormData(prev => ({ ...prev, subCategory: cleaned }));
+    }
+  };
 
   const handleNameChange = (e) => {
     const val = e.target.value;
@@ -132,65 +162,13 @@ const AdminPanel = ({ onBack }) => {
     notify(`Бул товар базада бар!`, 'error');
   };
 
-  const checkDuplicateWithAI = async (newName) => {
-    const existingList = products.map(p => p.name).join(", ");
-    if (!existingList) return "UNIQUE";
-    try {
-      const response = await fetch("/api/classify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: `Сен базадагы товарларды кайталануудан коргоочу жардамчысың. Эгер жаңы товар базада бар товардын синоними болсо же мааниси 100% бирдей болсо, ГАНА "DUPLICATE" деп жооп бер. Жооп 1 сөз: DUPLICATE же UNIQUE.` },
-            { role: "user", content: `Базада: [${existingList}]. Жаңы товар: "${newName}"` }
-          ],
-          temperature: 0
-        })
-      });
-      const data = await response.json();
-      return data.choices?.[0]?.message?.content?.trim() || "UNIQUE";
-    } catch (err) { return "UNIQUE"; }
-  };
-
-  const detectSubCategory = async (productName) => {
-    if (!productName || productName.length < 2 || formData.mainCategory === 'Тандаңыз...') return;
-    try {
-      const response = await fetch("/api/classify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: "Товардын атына карап, анын ички категориясын ГАНА 1 сөз менен аныкта." },
-            { role: "user", content: `Категория: ${formData.mainCategory}. Товар: "${productName}"` }
-          ],
-          temperature: 0.1
-        })
-      });
-      if (response.ok) {
-        const data = await response.json();
-        const detected = data.choices[0].message.content.trim().replace(/[.]/g, "");
-        setFormData(prev => ({ ...prev, subCategory: detected }));
-      }
-    } catch (err) { console.error(err); }
-  };
-
   const handleSave = async () => {
     const isExactDuplicate = products.some(p => p.name.toLowerCase() === formData.name.toLowerCase() && p.mainCategory === formData.mainCategory);
-    
-    if (isExactDuplicate) {
-      notify(`"${formData.name}" базада мурунтан бар!`, 'error');
-      return;
-    }
-
-    if (!formData.name || !formData.price || formData.mainCategory === 'Тандаңыз...') {
-      return notify("Маалыматты толук киргизиңиз!", 'error');
-    }
+    if (isExactDuplicate) return notify(`"${formData.name}" базада мурунтан бар!`, 'error');
+    if (!formData.name || !formData.price || formData.mainCategory === 'Тандаңыз...') return notify("Маалыматты толук киргизиңиз!", 'error');
 
     setLoading(true);
     const aiDecision = await checkDuplicateWithAI(formData.name);
-
     if (aiDecision === "DUPLICATE") {
       notify(`AI: "${formData.name}" окшошу табылды!`, 'error');
       setLoading(false);
@@ -259,8 +237,6 @@ const AdminPanel = ({ onBack }) => {
 
   return (
     <div className="admin-container">
-      
-      {/* ЖАҢЫ: УВЕДОМЛЕНИЕ КОНТЕЙНЕР (Баардык билдирүүлөр ушул жерде тизилет) */}
       <div style={styles.notificationContainer}>
         {notifications.map(n => (
           <div key={n.id} style={{...styles.toast, background: n.bg}}>
@@ -279,7 +255,7 @@ const AdminPanel = ({ onBack }) => {
             </p>
             <div style={{display: 'flex', gap: '10px'}}>
               <button onClick={() => setShowConfirm(false)} style={styles.cancelBtn}>Жок</button>
-              <button onClick={handleDelete} style={styles.confirmBtn}>Ооба, өчүрүлсүн</button>
+              <button onClick={handleDelete} style={styles.confirmBtn}>Ооба</button>
             </div>
           </div>
         </div>
@@ -313,7 +289,6 @@ const AdminPanel = ({ onBack }) => {
               <div className="modern-ai-badge">
                 <div className="pulse-dot"></div>
                 <span className="badge-text">{formData.subCategory}</span>
-                <div className="badge-tail"></div>
               </div>
             )}
             <input 
@@ -327,12 +302,11 @@ const AdminPanel = ({ onBack }) => {
                 detectSubCategory(e.target.value);
               }} 
             />
-            
             {suggestions.length > 0 && (
               <div style={styles.suggestionBox}>
                 {suggestions.map((p, i) => (
                   <div key={i} style={styles.suggestionItem} onClick={() => selectSuggestion(p)} onMouseDown={(e) => e.preventDefault()}>
-                     <b>{p.name}</b> — {p.mainCategory}
+                    <b>{p.name}</b> — {p.mainCategory}
                   </div>
                 ))}
               </div>
