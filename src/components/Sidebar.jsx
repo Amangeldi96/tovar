@@ -129,7 +129,19 @@ const Sidebar = ({ isOpen, onSelectProduct }) => {
  <div className="product-list-accordion">
   <div className="accordion-inner">
     {cat.items.map((item, i) => (
-      <div key={i} className="product-item" onClick={() => onSelectProduct(item.n, item.u, item.p)}>
+      <div
+  key={i}
+  className="product-item"
+  onClick={() => {
+    onSelectProduct(item.n, item.u, item.p);
+
+   
+    setOpenMain(null);
+    setOpenSub(null);
+
+    setSearchTerm("");
+  }}
+>
     
         <span className="p-name">{item.n}</span>
         
