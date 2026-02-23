@@ -5,6 +5,8 @@ import Sidebar from './Sidebar.jsx';
 import { db as firestore } from '../firebase'; // Firebase импорттоо
 import { collection, onSnapshot, query } from 'firebase/firestore';
 
+
+
 /** * Стилденген UnitSelect компоненти */
 const UnitSelect = ({ value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -141,11 +143,45 @@ const MainContent = () => {
     link.click();
   };
 
-  const handlePrint = () => window.print();
+const handlePrint = () => {
+  // 1. Басып чыгарылбай турган элементтерди табабыз (Header, Sidebar, Form ж.б.)
+  const mainLayout = document.querySelector('.main-layout');
+  const header = document.querySelector('header');
+  const footer = document.querySelector('.fixed-footer');
+  const toastContainer = document.querySelector('.toast-container');
+  const printArea = document.getElementById('print-area');
+
+  // 2. Баарын жашырабыз
+  if (mainLayout) mainLayout.style.display = 'none';
+  if (header) header.style.display = 'none';
+  if (footer) footer.style.display = 'none';
+  if (toastContainer) toastContainer.style.display = 'none';
+  
+  // 3. Таблицаны убактылуу көрсөтөбүз
+  printArea.style.display = 'block';
+  printArea.style.position = 'absolute';
+  printArea.style.top = '0';
+  printArea.style.left = '0';
+  printArea.style.width = '100%';
+
+  // 4. Принтерди чакырабыз
+  setTimeout(() => {
+    window.print();
+    
+    // 5. Принтер жабылгандан кийин баарын кайра калыбына келтиребиз
+    if (mainLayout) mainLayout.style.display = 'flex'; // же сиздин баштапкы стилиңиз
+    if (header) header.style.display = 'flex';
+    if (footer) footer.style.display = 'block';
+    if (toastContainer) toastContainer.style.display = 'block';
+    printArea.style.display = 'none';
+  }, 100);
+};
+
+
 
   return (
     <div className="app-container">
-      <div id="print-area">
+      <div id="print-area" style={{ display: 'none' }}>
         <h1>Таблица цен</h1>
         <table className="p-table">
           <thead>
