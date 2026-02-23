@@ -1,788 +1,714 @@
 :root {
-            --primary: #2563eb;
-            --danger: #ef4444;
-            --success: #10b981;
-            --sidebar-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --radius: 12px;
-        }
-
-
-        body {
-            margin: 0;
-            font-family: 'Inter', system-ui, sans-serif;
-            background: #ffffff;
-            color: var(--text-main);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-						overflow-x: hidden; /* горизонталдык scroll өчүрүлөт */
- 					  max-width: 100vw;
-            width: 100%;
-        }
-/* Текстти белгилегендеги (выделение) эффект */
-::selection {
-    background-color: #007bff; /* Белгиленгендеги фондун түсү (көк) */
-    color: #ffffff;            /* Белгиленгендеги тексттин түсү (ак) */
+    --primary: #2563eb;
+    --danger: #ef4444;
+    --success: #10b981;
+    --sidebar-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 12px;
 }
 
-/* Safari браузери үчүн (кээде керек болот) */
-::-moz-selection {
-    background-color: #007bff;
-    color: #ffffff;
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+* {
+    scrollbar-width: none !important; 
+    -ms-overflow-style: none !important; 
+}
+
+/* ================= BASE ================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #fff;
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ================= HEADER ================= */
+
+.header {
+    background: #fff;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--primary);
+}
+
+.header-btns {
+    display: flex;
+    gap: 10px;
+}
+
+/* ================= MAIN LAYOUT ================= */
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    flex: 1;
+    min-height: 0;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar {
+    background: #fff;
+    border-right: 1px solid var(--border);
+    padding: 8px;
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* ================= CONTENT ================= */
+
+.content {
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 120px;
+}
+
+.card {
+    background: #fff;
+    padding: 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+/* ================= FORM ================= */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: 4.5fr 0.6fr 1fr 1fr auto; 
+    gap: 12px;
+    align-items: end;
 }
 
 
-        /* Header */
-        .header { background: #fff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .logo { font-weight: 800; font-size: 18px; color: var(--primary); }
-        .header-btns { display: flex; gap: 10px; }
+.form-item {
+    width: 100%;
+}
 
-        /* Main Layout */
-        .main-layout { display: grid; grid-template-columns: 280px 1fr; flex: 1;}
-        
+.form-item input {
+    width: 100%;
+}
 
-        
-        .search-container { margin-bottom: 20px; position: sticky; top: 0; background: #fff; z-index: 10; }
-        .search-input { 
-            width: 100%; padding: 10px 12px; border: 1px solid var(--border); 
-            border-radius: 8px; outline: none; transition: 0.3s; box-sizing: border-box;
-        }
-        .search-input:focus { border-color: var(--primary); }
 
-        .cat-group { margin-bottom: 10px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-        .cat-group.hidden { display: none; }
-        
-        .cat-btn { 
-            width: 100%; padding: 12px 15px; background: #fff; border: none; 
-            display: flex; justify-content: space-between; align-items: center; 
-            cursor: pointer; font-weight: 700; transition: 0.2s;
-            box-sizing: border-box;
-        }
+.custom-select-wrapper {
+    min-width: 80px; 
+}
 
-        .arrow-wrapper { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
-        .arrow-icon { width: 6px; height: 6px; border-right: 2px solid var(--text-muted); border-bottom: 2px solid var(--text-muted); transform: rotate(-45deg); transition: 0.3s; display: block; }
-        .cat-group.active .arrow-icon { transform: rotate(45deg); }
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
 
-        .sub-menu { display: none; background: white; border-top: 1px solid #f1f5f9; }
-        .sub-menu div { padding: 10px 20px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
-        .sub-menu div.hidden { display: none; }
-        .sub-menu div:hover { background: #eff6ff; color: var(--primary); }
-        .cat-group.active .sub-menu { display: block; }
+label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
 
-        /* Content Area */
-        .content { 
-            padding: 24px; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px;
-            padding-bottom: 100px;
-        }
-        .card { background: white; padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); }
-        
-        .form-grid { display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr auto; gap: 15px; align-items: end; }
-        .input-group { display: flex; flex-direction: column; gap: 6px; }
-        label { font-size: 12px; font-weight: 700; color: var(--text-muted); }
-        
-        input, .custom-select-trigger { 
-            height: 44px; width: 100%; border: 1px solid var(--border); 
-            border-radius: 8px; padding: 0 12px; box-sizing: border-box; 
-            font-size: 14px; outline: none; display: flex; align-items: center; 
-            justify-content: space-between; background: #fff;
-        }
+input {
+    height: 44px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 14px;
+    outline: none;
+}
 
-        .select-box { position: relative; width: 100%; }
-        .dropdown-arrow { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid var(--text-muted); margin-left: 8px; }
-        .dropdown-menu { position: absolute; top: 48px; left: 0; width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 8px; display: none; z-index: 2000; padding: 5px; box-sizing: border-box; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .dropdown-menu.active { display: block; }
-        .options-list { max-height: 200px; overflow-y: auto; margin: 0; padding: 0; list-style: none; }
-        .options-list li { padding: 10px; cursor: pointer; border-radius: 6px; font-size: 13px; }
-        .options-list li:hover { background: #eff6ff; color: var(--primary); }
+/* ================= BUTTONS ================= */
 
-        .btn-add { background: var(--primary); color: white; border: none; height: 44px; padding: 0 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-        .btn-print { background: #1e293b; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
-        .btn-word { background: #16a34a; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+.btn-add {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
 
-        table { width: 100%; border-collapse: collapse; }
-        th { padding: 12px; font-size: 12px; color: var(--text-muted); border-bottom: 2px solid var(--border); text-align: center; }
-        td { padding: 12px; border-bottom: 1px solid var(--border); text-align: center; font-size: 14px; }
+.btn-print {
+    background: #1e293b;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-word {
+    background: #16a34a;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* ================= TABLE ================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    padding: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
+    text-align: center;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    font-size: 14px;
+}
+
+/* ================= FIXED FOOTER ================= */
+
 .fixed-footer {
     position: fixed;
     bottom: 0;
     right: 0;
     left: 280px;
-    background: #ffffff;
+    background: #fff;
     border-top: 2px solid var(--primary);
     padding: 15px 40px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
     z-index: 1000;
 }
-        .total-box { font-size: 18px; font-weight: 800; color: var(--text-main); }
-        .total-amount { color: var(--primary); margin-left: 10px; font-size: 22px; }
 
-        /* MODAL STYLE */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
-            display: none; align-items: center; justify-content: center; z-index: 3000;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-card {
-            background: white; padding: 30px; border-radius: 16px;
-            width: 350px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            transform: scale(0.9); transition: 0.2s;
-        }
-        .modal-overlay.active .modal-card { transform: scale(1); }
-        .modal-icon { width: 60px; height: 60px; background: #fee2e2; color: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 20px; }
-        .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
-        .modal-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
-        .modal-actions { display: flex; gap: 12px; }
-        .btn-modal { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; }
-        .btn-cancel { background: #f1f5f9; color: var(--text-main); }
-        .btn-confirm { background: var(--danger); color: white; }
-
-        /* TOAST NOTIFICATION */
-        .toast-container { 
-    position: fixed; 
-    bottom: 80px; /* Эми ылдый жактан 80px өйдө турат */
-    right: 20px; 
-    z-index: 9999; 
+.total-box {
+    font-size: 18px;
+    font-weight: 800;
 }
-        .toast { 
-            background: white; color: var(--text-main); padding: 12px 24px; 
-            border-radius: 8px; box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            margin-bottom: 10px; border-left: 4px solid var(--primary);
-            display: flex; align-items: center; gap: 10px; font-weight: 600;
-            animation: slideIn 0.3s ease forwards;
-        }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .toast.success { border-left-color: var(--success); }
-        .toast.danger { border-left-color: var(--danger); }
 
-        #print-area { display: none; }
+.total-amount {
+    color: var(--primary);
+    margin-left: 10px;
+    font-size: 22px;
+}
+
+/* ================= DELETE BUTTON ================= */
+
+.btn-delete-row {
+    background: #fee2e2;
+    border: none;
+    color: var(--danger);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-delete-row:hover {
+    background: var(--danger);
+    color: #fff;
+}
 
 /* ================= PRINT VERSION ================= */
+
+#print-area {
+    display: none;
+}
+
+
 @media print {
-    /* Барактын четиндеги браузер кошкон (дата, URL, аталыш) жазууларды өчүрүү */
+
     @page {
-        margin: 15mm; /* Барактын четиндеги боштук (поля) */
-        size: auto;
+        margin: 15mm;
     }
 
+    body * {
+        visibility: hidden;
+    }
 
-    /* Принт аймагын гана көрсөтүү */
-    #print-area, #print-area * {
+    #print-area,
+    #print-area * {
         visibility: visible;
     }
 
-    /* Принт аймагын барактын эң башына жана ортосуна жайгаштыруу */
     #print-area {
         position: absolute;
         left: 0;
         top: 0;
         width: 100%;
-        display: block !important;
-        padding: 0;
-        margin: 0;
     }
 
-    /* Таблицанын аталышын ортолоо */
     #print-area h1 {
         text-align: center;
         font-size: 18pt;
         margin-bottom: 20px;
-        color: #000;
-        visibility: visible;
     }
 
-		.p-table tr.total-row td:first-child {
-        text-align: center; /* Текстти (ИТОГО) ортолоо */
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-    }
-
-    /* Таблицанын стилдери */
     .p-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 10px;
     }
 
-   .p-table th, .p-table td {
-        border: 1px solid #000 !important; /* Даана кара чек ара */
-        padding: 10px 5px;
+    .p-table th,
+    .p-table td {
+        border: 1px solid #000 !important;
+        padding: 10px;
         text-align: center;
         font-size: 12pt;
-        color: #000 !important;
-        word-wrap: break-word;
     }
 
-    /* Баш сөздөрдү (thead) боз кылуу (кааласаңыз) же жөн эле калың кылуу */
-    .p-table th {
-        background-color: #f2f2f2 !important;
-        -webkit-print-color-adjust: exact;
-        font-weight: bold;
+    .header,
+    .main-layout,
+    .sidebar,
+    .content,
+    .fixed-footer,
+    button {
+        display: none !important;
     }
 
-    /* 6. МИНЕ УШУЛ ЖЕР СИЗ КӨРГӨН СҮРӨТТӨГҮДӨЙ КЫЛАТ */
-    /* "ИТОГО" жазуусу турган ячейканы ортолоо */
-    .p-table tr td[colspan="5"] {
-        text-align: center !important; /* Текст так ортодо болот */
-        font-weight: bold !important;
-        text-transform: uppercase;   /* Чоң тамгалар менен */
-        font-size: 13pt;
-        letter-spacing: 2px;         /* Тамгалардын арасы бир аз ачык */
+		#print-area {
+        display: block !important;
+        visibility: visible !important;
     }
-
-    /* Сумма турган акыркы ячейканы калың кылуу */
-    .p-table tr td:last-child {
-        font-weight: bold !important;
-        font-size: 13pt;
-        text-align: center !important;
-    }
-
-    /* 7. Башка эч нерсе баракка чыкпашы үчүн кепилдик */
-    .header, .main-layout, .sidebar, .content, button, .card, 
-    .fixed-footer, .modal-overlay, .toast-container, .mobile-menu-btn {
+    
+    .header, .main-layout, .sidebar, .content, .fixed-footer, .btn-add {
         display: none !important;
     }
 }
 
-/* Footer кнопкалар default жашыруун */
-.fixed-footer .btn-word,
-.fixed-footer .btn-print {
-    display: none;
-}
-
-/* Mobile menu button */
-.mobile-menu-btn {
-    display: none; /* desktop'ta жашыруун */
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-}
-
-/* ================= MOBILE VERSION ================= */
-@media (max-width: 900px) {
-
-    /* ☰ кнопканы көрсөтөбүз */
-    .mobile-menu-btn {
-        display: block;
-    }
-
-    /* Header кнопкаларды жашырабыз */
-    .header-btns {
-        display: none;
-    }
-
-.main-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    /* Барактын бийиктигинен Header'ди алып салгандагы калган бөлүк */
-    height: calc(100vh - 64px); /* 64px - бул сиздин Header'дин бийиктиги */
-    overflow: hidden; /* Бүтүндөй барак скролл болбошу үчүн */
-}
-
-/* ================= SIDEBAR GENERAL ================= */
-.sidebar {
-    background: #fff;
-    border-right: 1px solid var(--border);
-    padding: 8px; 
-    width: 240px;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-}
-/* ===== SIDEBAR SCROLL FIX ===== */
-.sidebar {
-    height: 100vh !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-}
-
-.main-layout {
-    min-height: 0;
-}
-
-    .sidebar.active {
-        left: 0;
-    }
-
-
-    .fixed-footer {
-        left: 0 !important;
-        right: 0;
-        bottom: 0;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .content {
-			overflow-x: hidden !important;
-        padding-bottom: 120px;
-    }
-}
-@media (max-width: 900px) {
-
-    .fixed-footer {
-        left: 0 !important;
-        right: 0;
-        bottom: 0;
-        padding: 6px 8px; /* азайттык */
-        gap: 6px;
-    }
-
-    .fixed-footer .btn-word,
-    .fixed-footer .btn-print {
-        display: inline-flex;
-        flex: unset;           /* толук жайылбасын */
-        padding: 6px 12px;     /* ичиндеги аралык кичине */
-        height: 30px;          /* бийиктиги кичине */
-        font-size: 13px;
-        border-radius: 6px;
-    }
-
-    .total-box {
-        font-size: 13px;
-        margin-right: auto; /* сол жакта калат */
-    }
-}
-@media (max-width: 900px) {
-
-    .card {
-        overflow-x: auto;
-    }
-
-    table {
-        min-width: 650px; /* таблица кысылбасын */
-    }
-
-}
-@media (max-width: 900px) {
-
-    .form-grid {
-        grid-template-columns: 1fr; /* бир колонка */
-        gap: 10px;
-    }
-
-    .input-group {
-        width: 100%;
-    }
-
-    .btn-add {
-        width: 100%;
-        height: 44px;
-        margin-top: 5px;
-    }
-
-}
-/* Кнопкаларды басканда ичиндеги текст белгиленип (выделение) калбашы үчүн */
-/* Кнопкалар үчүн гана user-select:none */
-button, .btn-add, .btn-print, .btn-word, .cat-btn {
-    -webkit-user-select: none;
-    -ms-user-select: none;
+/* ================= CUSTOM SELECT (UnitSelect) ================= */
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
     user-select: none;
 }
 
-/* Товарлар (sub-menu div) үчүн текстти белгилөөгө уруксат беребиз */
-.sub-menu div {
-    padding: 10px 20px;
-    font-size: 13px;
+.custom-select-trigger {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
     cursor: pointer;
-    border-bottom: 1px solid #f1f5f9;
-    /* pointer-events кошуп көрүңүз */
-    pointer-events: auto; 
-    position: relative;
-    z-index: 10;
+    font-size: 14px;
+    transition: all 0.2s;
 }
 
-/* Ал эми кадимки тексттер (таблица, баш сөздөр) белгилене берет */
-td, th, h2, label, .total-box {
-    user-select: text;
+.custom-select-trigger:hover {
+    border-color: var(--primary);
 }
 
-
-
-/* 1. Жалпы барактагы тексттерди белгилөөнү өчүрүү */
-
-
-/* 2. Таблицанын ичиндеги маалыматтарды көчүрүү керек болушу мүмкүн, 
-      ошондуктан аларга гана уруксат беребиз */
-table, .p-table, input, textarea {
-    -webkit-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
+.custom-select-trigger.open {
+    border-color: var(--primary);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
-/* 3. Кнопкаларды, уведомлениелерди жана менюларды такыр белгиленбей тургандай кылуу */
-button, 
-.btn-add, 
-.btn-print, 
-.btn-word, 
-.cat-btn, 
-.toast, 
-.toast-container, 
-.sidebar, 
-.header, 
-.logo,
-.modal-card {
-    -webkit-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important;
-    /* Кээде басканда көк түс чыгып кетпеши үчүн */
-    -webkit-tap-highlight-color: transparent;
+.arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--text-muted);
+    transition: transform 0.3s;
 }
 
-/* 4. Сиз мурун жазган белгилөө түсүн (selection background) өчүрүп салабыз же тууралайбыз */
-
-input, textarea {
-    caret-color: auto; /* Инпуттун ичинде сызыкча кайра көрүнөт */
-    user-select: text;
+.arrow.up {
+    transform: rotate(180deg);
 }
 
-/* 3. Тексттин үстүнө барганда чычкандын белгисин кадимки жебе кылуу */
-th, td, label, h1, h2, .total-box, .cat-btn, .logo {
-    cursor: default; /* Тексттин үстүнө барганда 'I' белгиси эмес, кадимки жебе чыгат */
+.select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--primary);
+    border-top: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    z-index: 9999;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Sidebar Overlay */
-.sidebar-overlay {
-    display: none; /* Демейки боюнча жабык */
+.select-option {
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.select-option:hover {
+    background: #f1f5f9;
+}
+
+.select-option.selected {
+    background: #eff6ff;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.select-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.3); /* Бир аз караңгылатуу */
-    z-index: 3500; /* Sidebar'дан төмөн, бирок контенттен өйдө */
+    right: 0;
+    bottom: 0;
+    z-index: 9998;
 }
 
-/* Sidebar активдүү болгондо Overlay көрсөтүү */
-.sidebar-overlay.active {
-    display: block;
-}
-
-@media (min-width: 901px) {
-    .sidebar-overlay { display: none !important; } /* Компьютерде кереги жок */
-}
-
-
-
-
-/* ================= SIDEBAR GENERAL ================= */
-.sidebar {
-    background: #fff;
-    border-right: 1px solid var(--border);
-    padding: 8px; 
-    width: 240px; /* Кичине кенен кылдык, текст кысылбасын */
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-}
-
-/* ================= ACCORDION CORE LOGIC ================= */
-.main-group-wrapper {
-    width: 100%;
-    margin-bottom: 3px;    /* Группалардын ортосу (Сүрөттөгүдөй 3px) */
-}
-
-.sub-menu-accordion, .product-list-accordion {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 0.2s ease-out;
-    overflow: hidden;
-}
-
-.active > .sub-menu-accordion, 
-.active > .product-list-accordion {
-    grid-template-rows: 1fr;
-}
-
-.accordion-inner {
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-/* ================= БАШКЫ КАТЕГОРИЯ (Кызыл) ================= */
-.main-cat-btn {
-    width: 100%;
-    height: 36px;
-    padding: 0 10px;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--danger); 
-    border-radius: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 13px;
-    box-sizing: border-box;
-}
-
-/* АККОРДЕОН АЧЫЛГАНДА: Ички элементтерди оңго жылдыруу */
-.main-group-wrapper.active > .sub-menu-accordion > .accordion-inner {
-    padding-top: 3px;      /* Сүрөттөгүдөй үстүнөн 3px */
-    padding-left: 6px;     /* Ичкери бир аз жылдыруу */
-    padding-bottom: 2px;
-    gap: 3px;              /* Арматура менен Цементтин ортосу так 3px */
-}
-
-.cat-group {
-    width: 99%;
-    margin-bottom: 0px;    /* Ички группалар арасы gap аркылуу башкарылат */
-}
-
-
-/* ================= ИЧКИ КАТЕГОРИЯ (Көк) ================= */
-.sub-cat {
-    width: 100%;
-    height: 32px;
-    padding: 0 10px;
-    background: #f8fafc;
-    border-left: 3.5px solid var(--primary); 
-    border-radius: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    font-size: 12.5px;
-    font-weight: 600;
-    box-sizing: border-box;
-}
-
-/* Көк кнопка ачылганда продукттарды дагы бир аз оңго жылдыруу */
-.cat-group.active > .product-list-accordion > .accordion-inner {
-    border-top: none;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    margin-left: 0px; /* Эгер продукттарды дагы жылдыруу керек болсо, ушуну колдонсо болот */
-}
-
-.product-item {
-    padding: 6px 12px;
-    font-size: 12px;
-    color: var(--primary); 
-    border-bottom: 1px solid #f1f5f9;
-}
-
-/* ================= ЖЕБЕЛЕР ================= */
-.arrow-icon {
-    width: 5px;
-    height: 5px;
-    border-right: 1.8px solid #64748b;
-    border-bottom: 1.8px solid #64748b;
-    transform: rotate(-45deg);
-    transition: 0.2s;
-}
-
-.active > .main-cat-btn .arrow-icon,
-.active > .sub-cat .arrow-icon {
-    transform: rotate(45deg);
-}
-
-
-/* 1. ТЕЛЕФОНДО ҮСТҮНҮ (HEADER) ТАЗАЛОО */
-@media (max-width: 900px) {
-    /* Header ичиндеги Word жана Печать баскычтарын толук жоготуу */
-    .header .header-btns, 
-    .header .btn-word, 
-    .header .btn-print {
-        display: none !important;
-    }
-
-    /* Логотип жана Плюс кнопкасы (эгер бар болсо) гана калат */
-    .header {
-        justify-content: space-between;
-    }
-}
-
-/* 2. ТЕЛЕФОНДО ЭТЕКТИ (FOOTER) ТУУРАЛОО */
-@media (max-width: 900px) {
-    .fixed-footer {
-        display: flex !important; /* Асты сөзсүз көрүнсүн */
-        left: 0 !important;
-        right: 0;
-        bottom: 0;
-        padding: 8px 12px;
-        background: #fff;
-        border-top: 2px solid var(--primary);
-        z-index: 5000;
-        justify-content: space-between;
-        align-items: center;
-    }
-		.header .header-btns {
-        display: flex !important; /* Көрүнөө кылуу */
-        gap: 8px;
-        align-items: center;
-    }
-
-/* 2. Баскычтарды мобилдикке ылайыктап кичирейтүү */
-    .header .btn-word, 
-    .header .btn-print {
-        display: inline-flex !important;
-        padding: 6px 10px !important;
-        font-size: 12px !important;
-        height: 34px !important;
-        border-radius: 6px !important;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* 3. Текстти кыскартуу (эгер батпай жатса, иконка эле калтырсаңыз болот) */
-    /* Мисалы: "Word" дегендин ордуна "W" же иконка */
-    
-    .header .logo {
-        font-size: 16px; /* Логотип бир аз кичирейет, баскычтарга орун бошотот */
-    }
-
-    .total-box {
-        font-size: 14px;
-        margin-right: auto; /* Сумма сол жакта калат */
-    }
-}
-
-/* 3. КОМПЬЮТЕРДЕ (901px өйдө) ЭТЕКТЕГИ БАСКЫЧТАРДЫ ЖОГОТУУ */
-@media (min-width: 901px) {
-    /* Компьютерде Word/Print үстүндө (Header) болгондуктан, астында кереги жок */
-    .fixed-footer .btn-word,
-    .fixed-footer .btn-print {
-        display: none !important;
-    }
-    
-    /* Компьютерде сумма гана калат */
-    .fixed-footer {
-        justify-content: flex-end;
-    }
-}
-
-
-
-
-/* ӨЧҮРҮҮ БАСКЫЧЫН КАЛЫБЫНА КЕЛТИРҮҮ */
-.btn-delete-row {
-    background: #fee2e2 !important; /* Назик кызыл фон */
-    border: none !important;
-    color: #ef4444 !important;      /* Каныккан кызыл "X" */
-    font-size: 18px !important;
-    font-weight: bold !important;
-    cursor: pointer !important;
-    width: 32px !important;
-    height: 32px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 8px !important;  /* Бурчтары тегеректелген */
-    transition: all 0.2s ease !important;
-    padding: 0 !important;
-    line-height: 1 !important;
-    outline: none !important;
-}
-
-/* Чычканды үстүнө алып барганда фон өзгөрөт */
-.btn-delete-row:hover {
-    background-color: #ef4444 !important;
-    color: #ffffff !important;
-    transform: scale(1.1);
-}
-
-.btn-delete-row:active {
-    transform: scale(0.9);
-}
-
-/* ТАБЛИЦАДАГЫ ЯЧЕЙКАНЫН ТҮЗДӨЛҮШҮ */
-td:last-child {
-    text-align: center; /* Баскычты ортодо кармоо */
-    width: 50px;       /* Өтө чоң болуп кетпеши үчүн */
-}
-
-
-
-
-
-
-
-/* Ата-энелик блокту чектөөдөн бошотобуз */
-/* Инпуттун контейнери подсказканы кесип салбашы керек */
-.form-grid > div {
-    position: relative !important;
-    overflow: visible !important;
-}
-
-/* Подсказканын өзү */
+/* Подсказкалардын негизги контейнери */
 .autocomplete-dropdown {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 4px); /* Инпуттан бир аз төмөн */
     left: 0;
     right: 0;
     background: #ffffff;
-    border-radius: 8px;
     border: 1px solid #e2e8f0;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    z-index: 9999 !important; /* Баарынан өйдө турат */
-    max-height: 250px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    z-index: 5000;
+    max-height: 280px;
     overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: none; /* Firefox */
+    padding: 6px;
+    /* Скроллду жашыруу */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
 }
 
-/* Chrome/Safari үчүн скроллду жашыруу */
-.no-scrollbar::-webkit-scrollbar {
-    display: none !important;
+.autocomplete-dropdown::-webkit-scrollbar {
+    display: none;
 }
 
+/* Ар бир товардын сабы */
 .autocomplete-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 12px;
+    padding: 10px 14px;
     cursor: pointer;
-    border-bottom: 1px solid #f1f5f9;
-    transition: background 0.2s;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    gap: 12px;
 }
 
 .autocomplete-item:hover {
-    background: #f8fafc;
+    background-color: #f1f5f9; /* Чычканды үстүнө алып баргандагы түс */
 }
 
+/* Товардын аты */
 .autocomplete-item span {
     font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
+/* Товардын баасы */
 .autocomplete-item small {
-  flex-shrink: 0;
-  color: #2563eb;
-  background: #eff6ff;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 12px;
-  border: 1px solid #dbeafe;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2563eb; /* Көк түс менен бааны бөлүп көрсөтүү */
+    background: #eff6ff;
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+/* ================= SIDEBAR STYLES ================= */
+.sidebar {
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
 }
 
-.autocomplete-item:hover {
-  background: #f1f5f9;
+/* Издөө бөлүгү */
+.search-container {
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
 }
 
-/* === Анимация === */
-@keyframes dropdownFade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.search-input {
+    width: 100%;
+    height: 40px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0 12px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.search-input:focus {
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Менюнун мазмуну */
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    /* Скроллду жашыруу */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.sidebar-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* 1-деңгээл: Башкы категория */
+.main-group-wrapper {
+    margin-bottom: 4px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.main-cat-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    color: #1e293b;
+    background: #fff;
+    transition: background 0.2s;
+}
+
+.main-cat-btn:hover {
+    background: #f1f5f9;
+}
+
+.main-group-wrapper.active .main-cat-btn {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+/* 2-деңгээл: Ички папка (Sub-category) */
+.sub-menu-accordion {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #fcfcfd;
+}
+
+.main-group-wrapper.active .sub-menu-accordion {
+    max-height: 2000px; /* Жетиштүү бийиктик */
+}
+
+.cat-group {
+    padding-left: 12px;
+    border-left: 2px solid #e2e8f0;
+    margin-left: 14px;
+    margin-top: 2px;
+}
+
+.sub-cat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #64748b;
+    border-radius: 6px;
+}
+
+.sub-cat:hover {
+    color: #1e293b;
+    background: #f1f5f9;
+}
+
+.cat-group.active .sub-cat {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+/* 3-деңгээл: Товарлар тизмеси */
+.product-list-accordion {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.cat-group.active .product-list-accordion {
+    max-height: 1000px;
+}
+
+.product-item {
+    padding: 8px 12px 8px 24px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #475569;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.product-item:hover {
+    color: #2563eb;
+    background: rgba(37, 99, 235, 0.05);
+    border-radius: 4px;
+}
+
+.product-item::before {
+    content: "•";
+    position: absolute;
+    left: 10px;
+    color: #cbd5e1;
+}
+
+/* Жебечелер (Arrows) */
+.arrow-icon {
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid #94a3b8;
+    border-bottom: 2px solid #94a3b8;
+    transform: rotate(-45deg);
+    transition: transform 0.3s;
+}
+
+.arrow-icon.down {
+    transform: rotate(45deg);
+    border-color: #2563eb;
+}
+
+.arrow-icon.small {
+    width: 5px;
+    height: 5px;
+}
+
+/* Жыйынтык жок болсо */
+.no-results {
+    padding: 40px 20px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 900px) {
+    
+    .main-layout {
+        display: block !important; 
+    }
+
+    .sidebar {
+        position: fixed !important;
+        left: -100% !important; 
+        top: 0;
+        width: 280px;
+        height: 100vh;
+        background: #ffffff;
+        z-index: 5000; 
+        transition: left 0.3s ease; 
+        display: flex !important;
+        box-shadow: none;
+    }
+
+
+    .sidebar.active {
+        left: 0 !important; 
+        box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+    }
+
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 4000;
+        display: none;
+    }
+
+    .sidebar-overlay.active {
+        display: block; 
+    }
+
+    .fixed-footer {
+        left: 0 !important;
+        width: 100% !important;
+        padding: 10px 20px;
+    }
+}
+
+.menu-toggle, .hamburger-btn { 
+    display: none !important; 
+}
+@media (max-width: 900px) {
+    .menu-toggle, .hamburger-btn {
+        display: block !important;
+        cursor: pointer;
+    }
+}
+@media (min-width: 901px) {
+
+    .header .menu-toggle, 
+    .main-content .hamburger,
+    div[onClick*="isSidebarOpen"] { 
+        display: none !important; 
+    }
+    
+    .sidebar-toggle-btn {
+        display: none !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .menu-toggle {
+        display: block !important;
+    }
 }

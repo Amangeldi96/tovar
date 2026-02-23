@@ -283,3 +283,27 @@ input:-webkit-autofill:active {
         padding: 40px 25px;
     }
 }
+
+/* Иконкалардын ордун тактоо (Сиздин стилди бузбайт) */
+.input-group .input-icon-fixed {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b0b0b0;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    transition: 0.3s;
+}
+
+.input-group:focus-within .input-icon-fixed {
+    color: #6a49f2;
+}
+
+/* SVG үчүн мажбурлоочу өлчөм (Tauri үчүн маанилүү) */
+.input-icon-fixed svg {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+}
