@@ -259,6 +259,10 @@ td {
     body * {
         visibility: hidden;
     }
+		#print-area table tbody tr:last-child td {
+        text-align: center !important;
+        font-size: 12pt !important;
+    }
 
     #print-area,
     #print-area * {
@@ -290,6 +294,7 @@ td {
         text-align: center;
         font-size: 12pt;
     }
+		
 
     .header,
     .main-layout,
@@ -299,7 +304,6 @@ td {
     button {
         display: none !important;
     }
-
 		#print-area {
         display: block !important;
         visibility: visible !important;

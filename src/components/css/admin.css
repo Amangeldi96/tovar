@@ -57,7 +57,8 @@
 .form-inner-row {
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: flex-end; /* Баарын астынан бир сызыкка түздөйт */
+  width: 100%;
 }
 
 /* Инпуттардын стили */
@@ -83,7 +84,11 @@
 }
 
 /* Формадагы элементтердин өлчөмдөрү */
-.flex-grow-item { flex: 2; }
+.flex-grow-item {
+  flex: 5 !important; /* Башкалардан 5 эсе көп орун алат */
+  min-width: 450px;   /* ПК версияда өтө кичинекей болуп кетпеши үчүн */
+  position: relative;
+}
 .small-item { width: 100px; }
 .medium-item { width: 130px; }
 
