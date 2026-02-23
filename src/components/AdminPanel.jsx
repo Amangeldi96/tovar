@@ -320,7 +320,7 @@ const AdminPanel = ({ onBack }) => {
             </div>
             {unitOpen && (
               <div className="custom-dropdown-menu">
-                {['кг', 'шт', 'метр', 'пач', 'мешок', 'м²', 'м³'].map(item => (
+                {['кг', 'шт', 'метр', 'пач', 'мешок', 'м²', 'м³', 'литр'].map(item => (
                   <div key={item} className="dropdown-option" onClick={() => { setFormData({...formData, unit: item}); setUnitOpen(false); }}>{item}</div>
                 ))}
               </div>

@@ -8,7 +8,7 @@ import { collection, onSnapshot, query } from 'firebase/firestore';
 /** * Стилденген UnitSelect компоненти */
 const UnitSelect = ({ value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const options = ['кг', 'шт', 'метр', 'пач', 'мешок', 'м²', 'м³'];
+  const options = ['кг', 'шт', 'метр', 'пач', 'мешок', 'м²', 'м³', 'литр'];
 
   return (
     <div className="custom-select-wrapper">
@@ -58,8 +58,8 @@ const MainContent = () => {
   const [toasts, setToasts] = useState([]);
 
   // 2. ЖАҢЫ: Подсказкалар үчүн штаттар
-  const [baseProducts, setBaseProducts] = useState([]); // Базадагы бардык товарлар
-  const [suggestions, setSuggestions] = useState([]); // Изделген подсказкалар
+  const [baseProducts, setBaseProducts] = useState([]); 
+  const [suggestions, setSuggestions] = useState([]); 
 
   // 3. ЖАҢЫ: Базадан товарларды алуу (useEffect)
   useEffect(() => {
@@ -116,7 +116,7 @@ const MainContent = () => {
     }
     setDb([...db, { name, qty: parseFloat(qty), price: parseFloat(price), unit }]);
     setFormData({ name: '', qty: '', price: '', unit: 'кг' });
-    setSuggestions([]); // Кошулгандан кийин подсказканы жабуу
+    setSuggestions([]); 
     showToast("Материал кошулду!");
   };
 
@@ -213,7 +213,7 @@ const MainContent = () => {
     onChange={handleNameChange} 
     placeholder="Материал" 
     autoComplete="off"
-    onBlur={() => setTimeout(() => setSuggestions([]), 200)} // Инпуттан чыкканда жабылат
+    onBlur={() => setTimeout(() => setSuggestions([]), 200)} 
   />
   {suggestions.length > 0 && (
     <div className="autocomplete-dropdown no-scrollbar">
@@ -222,7 +222,7 @@ const MainContent = () => {
           key={i} 
           className="autocomplete-item" 
           onMouseDown={(e) => {
-            e.preventDefault(); // Тандаганда инпут фокусун жоготпошу үчүн
+            e.preventDefault(); 
             selectSuggestion(p);
           }}
         >
