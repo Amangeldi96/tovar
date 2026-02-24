@@ -392,6 +392,24 @@ select::-ms-expand {
     position: absolute;
     width: 100%;
   }
+	.flex-grow-item {
+    /* Мобилдикте min-width'ти өчүрөбүз, ошондо ал экрандын туурасына ыңгайлашат */
+    min-width: 0 !important; 
+    width: 100% !important;
+  }
+
+  .form-inner-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px; /* Элементтердин ортосуна боштук кошуп коёбуз */
+  }
+
+  /* Инпуттар экрандан чыкпашы үчүн */
+  .screenshot-input-style, 
+  .modern-input {
+    width: 100% !important;
+    box-sizing: border-box; /* Padding инпуттун ичинде калышы үчүн */
+  }
 
 }
 
