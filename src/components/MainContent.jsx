@@ -59,6 +59,29 @@ const MainContent = () => {
   const [suggestions, setSuggestions] = useState([]); 
 
   // ЖАҢЫ: ИИ үчүн штаттар
+  const [aiMode, setAiMode] = useState(false);
+  const [isAiLoading, setIsAiLoading] = useState(false);
+
+  useEffect(() => {
+    const q = query(collection(firestore, "all_products"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => doc.data());
+      setBaseProducts(data);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('material_db', JSON.stringify(db));
+  }, [db]);
+
+  const showToast = (msg, type = 'success') => {
+    const id = Date.now();
+    setToasts([...toasts, { id, msg, type }]);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3000);
+  };
+
+  // ЖАҢЫ: ИИ аркылуу издөө функциясы
  const fetchFromAI = async () => {
   if (!formData.name) {
     showToast("Алгач товардын атын жазыңыз!", "danger");
@@ -246,8 +269,7 @@ const handleNameChange = (e) => {
   {isAiLoading ? '...' : 'ИИ'}
 </button>
 
-           
-{suggestions.length > 0 && (
+                {suggestions.length > 0 && (
   <div className="autocomplete-dropdown no-scrollbar">
     {suggestions.map((p, i) => (
       <div 
