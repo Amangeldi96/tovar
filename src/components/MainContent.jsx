@@ -59,29 +59,6 @@ const MainContent = () => {
   const [suggestions, setSuggestions] = useState([]); 
 
   // ЖАҢЫ: ИИ үчүн штаттар
-  const [aiMode, setAiMode] = useState(false);
-  const [isAiLoading, setIsAiLoading] = useState(false);
-
-  useEffect(() => {
-    const q = query(collection(firestore, "all_products"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => doc.data());
-      setBaseProducts(data);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('material_db', JSON.stringify(db));
-  }, [db]);
-
-  const showToast = (msg, type = 'success') => {
-    const id = Date.now();
-    setToasts([...toasts, { id, msg, type }]);
-    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3000);
-  };
-
-  // ЖАҢЫ: ИИ аркылуу издөө функциясы
  const fetchFromAI = async () => {
   if (!formData.name) {
     showToast("Алгач товардын атын жазыңыз!", "danger");
@@ -89,11 +66,8 @@ const MainContent = () => {
   }
   
   setIsAiLoading(true);
-  // ИИ баскычы иштеп жатканда aiMode'ду күйгүзүп коюу керек
-  setAiMode(true); 
-
   try {
-    const response = await fetch('/api/classify', { 
+    const response = await fetch('/api/classify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: formData.name })
@@ -103,16 +77,18 @@ const MainContent = () => {
 
     const data = await response.json();
     
-    // Эгер ИИ объект түрүндө (price, unit) жооп кайтарса:
-    setFormData(prev => ({
-      ...prev,
-      price: data.price || prev.price,
-      unit: data.unit || prev.unit
-    }));
-    
-    showToast("ИИ маалыматты тапты!");
+    // МААНИЛҮҮ ОҢДОО: ИИ тапкан маалыматты сунуштар тизмесине кошуу
+    if (data.price) {
+      setSuggestions([{
+        name: formData.name, // Сиз жазган ат
+        price: data.price,   // ИИ тапкан баа
+        unit: data.unit || 'шт',
+        isAiResult: true     // Бул ИИден келгенин белгилөө үчүн
+      }]);
+      
+      showToast("ИИ маалыматты тапты!");
+    }
   } catch (error) {
-    console.error(error);
     showToast("ИИ иштетүүдө ката чыкты", "danger");
   } finally {
     setIsAiLoading(false);
@@ -270,23 +246,24 @@ const handleNameChange = (e) => {
   {isAiLoading ? '...' : 'ИИ'}
 </button>
 
-                {suggestions.length > 0 && !aiMode && (
-                  <div className="autocomplete-dropdown no-scrollbar">
-                    {suggestions.map((p, i) => (
-                      <div 
-                        key={i} 
-                        className="autocomplete-item" 
-                        onMouseDown={(e) => {
-                          e.preventDefault(); 
-                          selectSuggestion(p);
-                        }}
-                      >
-                        <span>{p.name}</span>
-                        <small>{p.price} сом</small>
-                      </div>
-                    ))}
-                  </div>
-                )}
+           
+{suggestions.length > 0 && (
+  <div className="autocomplete-dropdown no-scrollbar">
+    {suggestions.map((p, i) => (
+      <div 
+        key={i} 
+        className="autocomplete-item" 
+        onMouseDown={(e) => {
+          e.preventDefault(); 
+          selectSuggestion(p);
+        }}
+      >
+        <span>{p.name} {p.isAiResult ? " (ИИ)" : ""}</span>
+        <small>{p.price} сом</small>
+      </div>
+    ))}
+  </div>
+)}
               </div>
 
               <UnitSelect 
