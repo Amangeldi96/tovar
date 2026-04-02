@@ -98,22 +98,21 @@ const fetchFromAI = async () => {
 
     const data = await response.json();
     
-    if (data && data.price) {
-      // Маалыматты тизмеге кошуу
+    // Эгер баа нөл эмес болсо гана көрсөтөбүз
+    if (data && data.price > 0) {
       setSuggestions([{
         name: formData.name,
         price: data.price,
         unit: data.unit || 'шт',
         isAiResult: true
       }]);
-      // ИИ режимин күйгүзүү (бул тизмени көрсөтүүгө жардам берет)
       setAiMode(true); 
       showToast("ИИ маалыматты тапты!");
     } else {
-      showToast("ИИ бааны таба алган жок", "warning");
+      showToast("ИИ бааны таба алган жок же ката кетти", "warning");
     }
   } catch (error) {
-    showToast("Ката: " + error.message, "danger");
+    showToast("Байланыш катасы", "danger");
   } finally {
     setIsAiLoading(false);
   }
