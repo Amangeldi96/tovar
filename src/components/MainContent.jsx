@@ -83,36 +83,40 @@ const MainContent = () => {
 
   // ЖАҢЫ: ИИ аркылуу издөө функциясы
   const fetchFromAI = async () => {
-    if (!formData.name) {
-      showToast("Товардын атын жазыңыз!", "danger");
-      return;
-    }
-    setIsAiLoading(true);
-    showToast("ИИ издеп жатат...", "info");
+  if (!formData.name) {
+    showToast("Алгач товардын атын жазыңыз!", "danger");
+    return;
+  }
+  
+  setIsAiLoading(true);
+  showToast("ИИ издеп жатат...", "info");
 
-    try {
-      // Vercel'деги OpenAI API endpoint'уңузду чакыруу
-      const response = await fetch('/api/openai-search', { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: formData.name })
-      });
+  try {
+    const response = await fetch('/api/classify', { // Файлдын аты classify.js болгондуктан ушул дарек
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: formData.name })
+    });
 
-      if (!response.ok) throw new Error();
-      const data = await response.json();
-      
-      setFormData({
-        ...formData,
-        price: data.price || '',
-        unit: data.unit || 'шт'
-      });
-      showToast("ИИ маалымат тапты!");
-    } catch (error) {
-      showToast("ИИ ката берди", "danger");
-    } finally {
-      setIsAiLoading(false);
-    }
-  };
+    if (!response.ok) throw new Error("API катасы");
+
+    const data = await response.json();
+    
+    // Инпуттарды толтуруу
+    setFormData(prev => ({
+      ...prev,
+      price: data.price || prev.price,
+      unit: data.unit || prev.unit
+    }));
+    
+    showToast("ИИ маалыматты тапты!");
+  } catch (error) {
+    console.error(error);
+    showToast("Байланыш үзүлдү же ачкыч туура эмес", "danger");
+  } finally {
+    setIsAiLoading(false);
+  }
+};
 
   const handleNameChange = (e) => {
     const value = e.target.value;
