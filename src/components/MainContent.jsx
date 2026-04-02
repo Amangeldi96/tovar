@@ -89,8 +89,6 @@ const fetchFromAI = async () => {
   }
   
   setIsAiLoading(true);
-  setAiMode(true); // ИИ режимин иштетүү
-
   try {
     const response = await fetch('/api/classify', { 
       method: 'POST',
@@ -98,28 +96,23 @@ const fetchFromAI = async () => {
       body: JSON.stringify({ query: formData.name })
     });
 
-    if (!response.ok) {
-       const errorData = await response.json();
-       throw new Error(errorData.error || "Серверде ката");
-    }
-
     const data = await response.json();
     
     if (data && data.price) {
-      // МААНИЛҮҮ: ИИ тапкан маалыматты сунуштар тизмесине (suggestions) кошуу
+      // Маалыматты тизмеге кошуу
       setSuggestions([{
         name: formData.name,
         price: data.price,
         unit: data.unit || 'шт',
-        isAiResult: true // Бул ИИден келгенин белгилөө үчүн
+        isAiResult: true
       }]);
-      
+      // ИИ режимин күйгүзүү (бул тизмени көрсөтүүгө жардам берет)
+      setAiMode(true); 
       showToast("ИИ маалыматты тапты!");
     } else {
       showToast("ИИ бааны таба алган жок", "warning");
     }
   } catch (error) {
-    console.error("AI Fetch Error:", error);
     showToast("Ката: " + error.message, "danger");
   } finally {
     setIsAiLoading(false);
@@ -265,15 +258,21 @@ const selectSuggestion = (product) => {
                 />
                 
                 {/* ИИ БАСКЫЧЫ */}
-            <button 
+<button 
   type="button"
   className={`ai-btn-inside ${aiMode ? 'active' : ''}`}
-  onClick={() => {
-    // Эгер өчүк болсо - күйгүзүп, издөө баштайт. Эгер күйүп турган болсо - өчүрөт.
+  onClick={(e) => {
+    // 1. Баскычты басканда форма жөнөтүлүп кетпеши үчүн
+    e.preventDefault(); 
+    
     if (!aiMode) {
       fetchFromAI();
+      // 2. Инпутка фокусту кайтаруу, ошондо тизме жабылбайт
+      const inputElement = e.currentTarget.parentElement.querySelector('input');
+      if (inputElement) inputElement.focus();
     } else {
       setAiMode(false);
+      setSuggestions([]); // ИИ режимин өчүргөндө тизмени тазалоо
     }
   }}
 >
@@ -283,22 +282,29 @@ const selectSuggestion = (product) => {
                
  {/* Инпуттун астындагы сунуштар тизмеси */}
 {suggestions.length > 0 && (
-  <div className="autocomplete-dropdown no-scrollbar" style={{ display: 'block' }}>
+  <div 
+    className="autocomplete-dropdown no-scrollbar" 
+    style={{ 
+      display: 'block', 
+      position: 'absolute', 
+      zIndex: 9999, // Тизме эң үстүндө болушу керек
+      background: 'white',
+      width: '100%',
+      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+    }}
+  >
     {suggestions.map((p, i) => (
       <div 
         key={i} 
         className="autocomplete-item" 
         onMouseDown={(e) => {
-          e.preventDefault(); 
+          e.preventDefault(); // Инпут фокусун жоготпош үчүн
           selectSuggestion(p);
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-          <span>
-            {p.name} 
-            {p.isAiResult && <span style={{ marginLeft: '8px', fontSize: '10px', background: '#6366f1', color: 'white', padding: '2px 6px', borderRadius: '10px' }}>ИИ</span>}
-          </span>
-          <small style={{ color: '#6366f1', fontWeight: 'bold' }}>{p.price} сом</small>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>{p.name} {p.isAiResult ? " (ИИ)" : ""}</span>
+          <span style={{ color: '#6366f1', fontWeight: 'bold' }}>{p.price} сом</span>
         </div>
       </div>
     ))}
