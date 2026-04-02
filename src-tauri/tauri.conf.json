@@ -1,0 +1,35 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Материал",
+  "version": "0.1.0",
+  "identifier": "com.material.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:3000",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+{
+    "title": "Материал",
+    "width": 1200, 
+    "height": 800,
+    "resizable": true
+  }
+    ],
+    "security": {
+      "csp": "default-src 'self' asset:; img-src 'self' asset: https: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.openai.com https://*.firebaseio.com https://*.googleapis.com https://*.firebaseapp.com"
+    }
+  },
+"bundle": {
+    "active": false, 
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

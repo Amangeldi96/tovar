@@ -1,0 +1,309 @@
+/* 1. НЕГИЗГИ СТИЛДЕР */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    user-select: none;
+}
+
+.auth-wrapper-wrapper {
+    background-color: #f0f2f5;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow: hidden;
+}
+
+/* 2. БАШКЫ КОНТЕЙНЕР */
+.auth-wrapper {
+    width: 100%;
+    max-width: 900px;
+    height: 550px;
+    background: #ffffff;
+    border-radius: 20px;
+    display: flex;
+    position: relative;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* 3. ФОРМА КОНТЕЙНЕРИ */
+.form-container {
+    flex: 1.2;
+    position: relative;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.login-side,
+.forgot-side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    background: #ffffff;
+}
+
+.forgot-side {
+    transform: translateX(100%);
+}
+
+.auth-wrapper.show-forgot .login-side {
+    transform: translateX(-100%);
+}
+
+.auth-wrapper.show-forgot .forgot-side {
+    transform: translateX(0);
+}
+
+/* АРТКА БАСКЫЧЫ */
+.back-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8f9ff;
+    border: 1px solid #dee2e6;
+    padding: 6px 15px;
+    border-radius: 50px;
+    color: #4b2ea3;
+    cursor: pointer;
+    width: fit-content;
+    margin-bottom: 20px;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.back-nav:hover {
+    background: #4b2ea3;
+    color: white;
+    box-shadow: 0 4px 12px rgba(75, 46, 163, 0.2);
+}
+
+h1 {
+    color: #1a1a1a;
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+/* INPUT */
+.input-group input {
+    width: 100%;
+    border: none;
+    background: none;
+    border-bottom: 1px solid #dcdcdc; /* Жука боз сызык */
+    padding: 12px 10px 12px 40px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* ИКОНКА */
+.input-group i {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b0b0b0;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+/* КӨК ЛИНИЯ (АНИМАЦИЯ) */
+.input-group::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #6a49f2;
+    transition: width 0.4s ease;
+}
+
+/* FOCUS болгондо */
+.input-group:focus-within::after {
+    width: 100%;
+}
+
+.input-group:focus-within i {
+    color: #6a49f2;
+}
+
+.input-group input {
+    background-color: transparent !important;
+		border-radius: 0 !important;
+}
+
+
+
+
+/* ===== CHROME AUTOFILL COMPLETE RESET ===== */
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+
+    /* Көгүш фонду жок кылат */
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+
+    /* Текст түсү */
+    -webkit-text-fill-color: #333 !important;
+
+    /* Радиус толук жок */
+    border-radius: 0 !important;
+
+    /* Background override */
+    background-clip: content-box !important;
+}
+
+
+/* НЕГИЗГИ БАСКЫЧ */
+.action-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #4b2ea3, #6a49f2);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(106, 73, 242, 0.3);
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(106, 73, 242, 0.4);
+    filter: brightness(1.1);
+}
+
+/* FORGOT BUTTON */
+.forgot-trigger-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid #dee2e6;
+    border-radius: 50px;
+    color: #6c757d;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+.forgot-trigger-btn:hover {
+    border-color: #4b2ea3;
+    color: #4b2ea3;
+    background: rgba(75, 46, 163, 0.05);
+}
+
+/* WELCOME SIDE */
+.welcome-side {
+    flex: 1;
+    background: linear-gradient(135deg, #4b2ea3 0%, #6a49f2 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+    color: white;
+    text-align: center;
+    padding: 40px;
+}
+
+.welcome-side h2 {
+    font-size: 34px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.welcome-side p {
+    font-size: 16px;
+    opacity: 0.9;
+    line-height: 1.5;
+}
+
+/* STATUS MESSAGE */
+.status-msg {
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.status-msg.error {
+    color: #ef4444;
+}
+
+.status-msg.success {
+    color: #10b981;
+}
+
+/* МОБИЛДИК */
+@media (max-width: 768px) {
+
+    .auth-wrapper {
+        max-width: 380px;
+        height: 520px;
+        flex-direction: column;
+    }
+
+    .welcome-side {
+        display: none;
+    }
+
+    .form-container {
+        flex: 1;
+        width: 100%;
+    }
+
+    .login-side,
+    .forgot-side {
+        padding: 40px 25px;
+    }
+}
+
+/* Иконкалардын ордун тактоо (Сиздин стилди бузбайт) */
+.input-group .input-icon-fixed {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b0b0b0;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    transition: 0.3s;
+}
+
+.input-group:focus-within .input-icon-fixed {
+    color: #6a49f2;
+}
+
+/* SVG үчүн мажбурлоочу өлчөм (Tauri үчүн маанилүү) */
+.input-icon-fixed svg {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+}
