@@ -82,17 +82,18 @@ const MainContent = () => {
   };
 
   // ЖАҢЫ: ИИ аркылуу издөө функциясы
-  const fetchFromAI = async () => {
+ const fetchFromAI = async () => {
   if (!formData.name) {
     showToast("Алгач товардын атын жазыңыз!", "danger");
     return;
   }
   
   setIsAiLoading(true);
-  showToast("ИИ издеп жатат...", "info");
+  // ИИ баскычы иштеп жатканда aiMode'ду күйгүзүп коюу керек
+  setAiMode(true); 
 
   try {
-    const response = await fetch('/api/classify', { // Файлдын аты classify.js болгондуктан ушул дарек
+    const response = await fetch('/api/classify', { 
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: formData.name })
@@ -102,7 +103,7 @@ const MainContent = () => {
 
     const data = await response.json();
     
-    // Инпуттарды толтуруу
+    // Эгер ИИ объект түрүндө (price, unit) жооп кайтарса:
     setFormData(prev => ({
       ...prev,
       price: data.price || prev.price,
@@ -112,25 +113,27 @@ const MainContent = () => {
     showToast("ИИ маалыматты тапты!");
   } catch (error) {
     console.error(error);
-    showToast("Байланыш үзүлдү же ачкыч туура эмес", "danger");
+    showToast("ИИ иштетүүдө ката чыкты", "danger");
   } finally {
     setIsAiLoading(false);
   }
 };
 
-  const handleNameChange = (e) => {
-    const value = e.target.value;
-    setFormData({ ...formData, name: value });
+const handleNameChange = (e) => {
+  const value = e.target.value;
+  setFormData({ ...formData, name: value });
+  
+  if (aiMode) setAiMode(false);
 
-    if (value.length > 0 && !aiMode) {
-      const filtered = baseProducts.filter(p => 
-        p.name.toLowerCase().includes(value.toLowerCase())
-      ).slice(0, 6);
-      setSuggestions(filtered);
-    } else {
-      setSuggestions([]);
-    }
-  };
+  if (value.length > 0) {
+    const filtered = baseProducts.filter(p => 
+      p.name.toLowerCase().includes(value.toLowerCase())
+    ).slice(0, 6);
+    setSuggestions(filtered);
+  } else {
+    setSuggestions([]);
+  }
+};
 
   const selectSuggestion = (product) => {
     setFormData({
@@ -252,16 +255,20 @@ const MainContent = () => {
                 />
                 
                 {/* ИИ БАСКЫЧЫ */}
-                <button 
-                  type="button"
-                  className={`ai-btn-inside ${aiMode ? 'active' : ''}`}
-                  onClick={() => {
-                    setAiMode(!aiMode);
-                    if (!aiMode && formData.name) fetchFromAI();
-                  }}
-                >
-                  {isAiLoading ? '...' : 'ИИ'}
-                </button>
+            <button 
+  type="button"
+  className={`ai-btn-inside ${aiMode ? 'active' : ''}`}
+  onClick={() => {
+    // Эгер өчүк болсо - күйгүзүп, издөө баштайт. Эгер күйүп турган болсо - өчүрөт.
+    if (!aiMode) {
+      fetchFromAI();
+    } else {
+      setAiMode(false);
+    }
+  }}
+>
+  {isAiLoading ? '...' : 'ИИ'}
+</button>
 
                 {suggestions.length > 0 && !aiMode && (
                   <div className="autocomplete-dropdown no-scrollbar">

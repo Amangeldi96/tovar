@@ -4,7 +4,6 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
     const { query } = req.body;
@@ -20,22 +19,17 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: "Сен курулуш материалдарынын баасын билген жардамчысың. Колдонуучу товардын атын жазганда, анын орточо баасын жана өлчөө бирдигин JSON түрүндө гана кайтар. Мисалы: {\"price\": 150, \"unit\": \"кг\"}"
+            content: "Сен курулуш материалдарын таануучу жардамчысың. Колдонуучу товардын атын жазганда, анын орточо баасын жана бирдигин JSON түрүндө гана кайтар. Мисалы: {\"price\": 150, \"unit\": \"шт\"}"
           },
           { role: "user", content: query }
         ],
-        response_format: { type: "json_object" }
+        response_format: { type: "json_object" } // Бул жер маанилүү!
       }),
     });
 
     const data = await response.json();
-    
-    if (data.choices && data.choices[0]) {
-      const result = JSON.parse(data.choices[0].message.content);
-      return res.status(200).json(result);
-    } else {
-      throw new Error("OpenAI жооп берген жок");
-    }
+    const result = JSON.parse(data.choices[0].message.content);
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
