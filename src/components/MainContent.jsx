@@ -82,7 +82,7 @@ const MainContent = () => {
   };
 
   // ЖАҢЫ: ИИ аркылуу издөө функциясы
- const fetchFromAI = async () => {
+const fetchFromAI = async () => {
   if (!formData.name) {
     showToast("Алгач товардын атын жазыңыз!", "danger");
     return;
@@ -90,29 +90,32 @@ const MainContent = () => {
   
   setIsAiLoading(true);
   try {
-    const response = await fetch('/api/classify', {
+    // Даректи так текшериңиз: /api/classify
+    const response = await fetch('/api/classify', { 
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: formData.name })
     });
 
-    if (!response.ok) throw new Error("API катасы");
+    if (!response.ok) {
+       // Эгер серверден 404 же 500 ката келсе, ушул жер иштейт
+       const errorData = await response.json();
+       throw new Error(errorData.error || "Серверде ката");
+    }
 
     const data = await response.json();
     
-    // МААНИЛҮҮ ОҢДОО: ИИ тапкан маалыматты сунуштар тизмесине кошуу
-    if (data.price) {
-      setSuggestions([{
-        name: formData.name, // Сиз жазган ат
-        price: data.price,   // ИИ тапкан баа
-        unit: data.unit || 'шт',
-        isAiResult: true     // Бул ИИден келгенин белгилөө үчүн
-      }]);
-      
+    if (data && data.price) {
+      setFormData(prev => ({
+        ...prev,
+        price: data.price.toString(),
+        unit: data.unit || prev.unit
+      }));
       showToast("ИИ маалыматты тапты!");
     }
   } catch (error) {
-    showToast("ИИ иштетүүдө ката чыкты", "danger");
+    console.error("AI Fetch Error:", error); // Консолду (F12) караңыз
+    showToast("Ката: " + error.message, "danger");
   } finally {
     setIsAiLoading(false);
   }
@@ -269,7 +272,7 @@ const handleNameChange = (e) => {
   {isAiLoading ? '...' : 'ИИ'}
 </button>
 
-                {suggestions.length > 0 && (
+               
   <div className="autocomplete-dropdown no-scrollbar">
     {suggestions.map((p, i) => (
       <div 
@@ -285,7 +288,7 @@ const handleNameChange = (e) => {
       </div>
     ))}
   </div>
-)}
+
               </div>
 
               <UnitSelect 
