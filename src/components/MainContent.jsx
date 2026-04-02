@@ -89,8 +89,9 @@ const fetchFromAI = async () => {
   }
   
   setIsAiLoading(true);
+  setAiMode(true); // ИИ режимин иштетүү
+
   try {
-    // Даректи так текшериңиз: /api/classify
     const response = await fetch('/api/classify', { 
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -98,7 +99,6 @@ const fetchFromAI = async () => {
     });
 
     if (!response.ok) {
-       // Эгер серверден 404 же 500 ката келсе, ушул жер иштейт
        const errorData = await response.json();
        throw new Error(errorData.error || "Серверде ката");
     }
@@ -106,15 +106,20 @@ const fetchFromAI = async () => {
     const data = await response.json();
     
     if (data && data.price) {
-      setFormData(prev => ({
-        ...prev,
-        price: data.price.toString(),
-        unit: data.unit || prev.unit
-      }));
+      // МААНИЛҮҮ: ИИ тапкан маалыматты сунуштар тизмесине (suggestions) кошуу
+      setSuggestions([{
+        name: formData.name,
+        price: data.price,
+        unit: data.unit || 'шт',
+        isAiResult: true // Бул ИИден келгенин белгилөө үчүн
+      }]);
+      
       showToast("ИИ маалыматты тапты!");
+    } else {
+      showToast("ИИ бааны таба алган жок", "warning");
     }
   } catch (error) {
-    console.error("AI Fetch Error:", error); // Консолду (F12) караңыз
+    console.error("AI Fetch Error:", error);
     showToast("Ката: " + error.message, "danger");
   } finally {
     setIsAiLoading(false);
@@ -124,28 +129,31 @@ const fetchFromAI = async () => {
 const handleNameChange = (e) => {
   const value = e.target.value;
   setFormData({ ...formData, name: value });
-  
-  if (aiMode) setAiMode(false);
 
   if (value.length > 0) {
-    const filtered = baseProducts.filter(p => 
-      p.name.toLowerCase().includes(value.toLowerCase())
-    ).slice(0, 6);
-    setSuggestions(filtered);
+    // Эгер ИИ режими өчүк болсо гана базадан издейт
+    if (!aiMode) {
+      const filtered = baseProducts.filter(p => 
+        p.name.toLowerCase().includes(value.toLowerCase())
+      ).slice(0, 6);
+      setSuggestions(filtered);
+    }
   } else {
     setSuggestions([]);
+    setAiMode(false);
   }
 };
 
-  const selectSuggestion = (product) => {
-    setFormData({
-      ...formData,
-      name: product.name,
-      unit: product.unit || 'кг',
-      price: product.price || ''
-    });
-    setSuggestions([]);
-  };
+const selectSuggestion = (product) => {
+  setFormData({
+    ...formData,
+    name: product.name,
+    unit: product.unit || 'кг',
+    price: product.price || ''
+  });
+  setSuggestions([]);
+  setAiMode(false); // Тандагандан кийин ИИ режимин өчүрөбүз
+};
 
   const addItem = () => {
     const { name, qty, price, unit } = formData;
@@ -273,7 +281,9 @@ const handleNameChange = (e) => {
 </button>
 
                
-  <div className="autocomplete-dropdown no-scrollbar">
+ {/* Инпуттун астындагы сунуштар тизмеси */}
+{suggestions.length > 0 && (
+  <div className="autocomplete-dropdown no-scrollbar" style={{ display: 'block' }}>
     {suggestions.map((p, i) => (
       <div 
         key={i} 
@@ -283,11 +293,17 @@ const handleNameChange = (e) => {
           selectSuggestion(p);
         }}
       >
-        <span>{p.name} {p.isAiResult ? " (ИИ)" : ""}</span>
-        <small>{p.price} сом</small>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+          <span>
+            {p.name} 
+            {p.isAiResult && <span style={{ marginLeft: '8px', fontSize: '10px', background: '#6366f1', color: 'white', padding: '2px 6px', borderRadius: '10px' }}>ИИ</span>}
+          </span>
+          <small style={{ color: '#6366f1', fontWeight: 'bold' }}>{p.price} сом</small>
+        </div>
       </div>
     ))}
   </div>
+)}
 
               </div>
 
