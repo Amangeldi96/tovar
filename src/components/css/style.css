@@ -906,8 +906,6 @@ td {
   right: 6px;
   top: 50%;
   transform: translateY(-50%);
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
   border-radius: 6px;
   padding: 4px 8px;
   font-size: 11px;
@@ -949,7 +947,7 @@ td {
 .btn-pulsing-dot {
   width: 5px;
   height: 5px;
-  background-color: white; /* Активдүү баскычта ак тоголок */
+  background-color: #3b82f6; /* Активдүү баскычта ак тоголок */
   border-radius: 50%;
   position: absolute;
   /* Бул анимация мурункуларга аралашпайт */
