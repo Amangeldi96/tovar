@@ -906,6 +906,8 @@ td {
   right: 6px;
   top: 50%;
   transform: translateY(-50%);
+  background: none;
+  border: none;
   border-radius: 6px;
   padding: 4px 8px;
   font-size: 11px;
