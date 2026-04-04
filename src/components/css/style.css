@@ -931,31 +931,39 @@ td {
 }
 
 
+/* Тоголоктун сыртындагы контейнер */
+.pulsing-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;  /* Тоголок үчүн атайын орун */
+  height: 12px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* Тоголоктун өзү */
 .pulsing-dot {
-  display: inline-block;
-  width: 5px; /* Өтө назик кичинекей тоголок */
+  position: absolute; /* Контейнердин ичинде эркин болот */
+  width: 5px;
   height: 5px;
   background-color: #3b82f6;
   border-radius: 50%;
-  margin-left: 10px;
-  vertical-align: middle;
-  position: absolute;
   
-  /* Анимация түз эле тоголоктун өзүнө байланат */
+  /* Анимация эми кесилбейт, анткени ал absolute */
   animation: simple-radar 2s infinite ease-out;
 }
 
 @keyframes simple-radar {
   0% {
-    /* Башында көлөкө жок */
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
   }
   70% {
-    /* Тень 10px чейин жайылат - бул назик жана кесилбейт */
+    /* Тень 10px-ге чейин жайылат */
     box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
   }
   100% {
-    /* Аягында толук жоголот */
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
 }
