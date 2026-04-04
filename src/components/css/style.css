@@ -943,27 +943,33 @@ td {
   vertical-align: middle;
 }
 
-/* Тоголоктун өзү */
 .pulsing-dot {
-  position: absolute; /* Контейнердин ичинде эркин болот */
-  width: 5px;
-  height: 5px;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
   background-color: #3b82f6;
   border-radius: 50%;
+  margin-left: 12px;
+  position: relative;
+  vertical-align: middle;
   
-  /* Анимация эми кесилбейт, анткени ал absolute */
-  animation: simple-radar 2s infinite ease-out;
+  /* shadow ордуна outline анимациясын колдонобуз */
+  animation: outline-radar 2s infinite;
 }
 
-@keyframes simple-radar {
+@keyframes outline-radar {
   0% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    /* outline-offset терс болсо тоголоктун ичинде болот */
+    outline: 0px solid rgba(59, 130, 246, 0.8);
+    outline-offset: 0px;
   }
   70% {
-    /* Тень 10px-ге чейин жайылат */
-    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    /* outline сыртка карай 12px жайылат */
+    outline: 12px solid rgba(59, 130, 246, 0);
+    outline-offset: 0px;
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    outline: 0px solid rgba(59, 130, 246, 0);
+    outline-offset: 0px;
   }
 }
