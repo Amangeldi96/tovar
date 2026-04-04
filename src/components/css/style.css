@@ -931,6 +931,7 @@ td {
 }
 
 
+/* Негизги точка */
 .pulsing-dot {
   display: inline-block;
   width: 6px;
@@ -938,36 +939,41 @@ td {
   background-color: #3b82f6;
   border-radius: 50%;
   position: relative;
+  margin-left: 12px;
   vertical-align: middle;
-  margin-left: 10px;
-  
-  /* Маанилүү: Контейнердин ичинде анимация үчүн бош орун калтырабыз */
-  flex-shrink: 0;
+  z-index: 2; /* Точка дайыма үстүндө турат */
 }
 
-/* Радар эффекти үчүн өзүнчө катмар */
+/* Радар (тень) эффекти */
 .pulsing-dot::after {
   content: '';
   position: absolute;
+  
+  /* Маанилүү: Толкун так ортодон чыгыш үчүн */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  
+  /* Баштапкы өлчөмү точка менен бирдей */
   width: 100%;
   height: 100%;
-  background-color: rgba(59, 130, 246, 0.5); /* Тунук көк түс */
+  
+  background-color: rgba(59, 130, 246, 0.6);
   border-radius: 50%;
-  /* Анимация кесилбеши үчүн өтө чоң масштаб кылбайбыз (3кө чейин жетет) */
-  animation: radar-safe 2s infinite ease-out;
-  pointer-events: none; /* Тень баскычты басканга тоскоол болбошу керек */
+  z-index: -1; /* Тень точканын астында жайылат */
+  
+  /* Анимация */
+  animation: dot-radar-effect 2s infinite ease-out;
 }
 
-@keyframes radar-safe {
+@keyframes dot-radar-effect {
   0% {
     transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
+    opacity: 0.8;
   }
   100% {
-    transform: translate(-50%, -50%) scale(3.5);
+    /* Толкун 4 эсе чоңоёт, бирок контейнер кеспеши үчүн translate сакталат */
+    transform: translate(-50%, -50%) scale(4);
     opacity: 0;
   }
 }
