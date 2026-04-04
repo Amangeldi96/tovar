@@ -931,49 +931,31 @@ td {
 }
 
 
-/* Негизги точка */
 .pulsing-dot {
   display: inline-block;
-  width: 6px;
-  height: 6px;
+  width: 5px; /* Өтө назик кичинекей тоголок */
+  height: 5px;
   background-color: #3b82f6;
   border-radius: 50%;
-  position: relative;
-  margin-left: 12px;
+  margin-left: 10px;
   vertical-align: middle;
-  z-index: 2; /* Точка дайыма үстүндө турат */
-}
-
-/* Радар (тень) эффекти */
-.pulsing-dot::after {
-  content: '';
   position: absolute;
   
-  /* Маанилүү: Толкун так ортодон чыгыш үчүн */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  
-  /* Баштапкы өлчөмү точка менен бирдей */
-  width: 100%;
-  height: 100%;
-  
-  background-color: rgba(59, 130, 246, 0.6);
-  border-radius: 50%;
-  z-index: -1; /* Тень точканын астында жайылат */
-  
-  /* Анимация */
-  animation: dot-radar-effect 2s infinite ease-out;
+  /* Анимация түз эле тоголоктун өзүнө байланат */
+  animation: simple-radar 2s infinite ease-out;
 }
 
-@keyframes dot-radar-effect {
+@keyframes simple-radar {
   0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.8;
+    /* Башында көлөкө жок */
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  70% {
+    /* Тень 10px чейин жайылат - бул назик жана кесилбейт */
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
   }
   100% {
-    /* Толкун 4 эсе чоңоёт, бирок контейнер кеспеши үчүн translate сакталат */
-    transform: translate(-50%, -50%) scale(4);
-    opacity: 0;
+    /* Аягында толук жоголот */
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
 }
