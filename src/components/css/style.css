@@ -934,25 +934,49 @@ td {
 
 /* pulsing-dot классына стиль жана анимация */
 .pulsing-dot {
-  width: 6px;
-  height: 6px;
-  background-color: #3b82f6;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background-color: #3b82f6; /* Сиз тандаган көк түс */
   border-radius: 50%;
   position: relative;
+  vertical-align: middle;
 }
 
 /* Радар (тень) эффекти үчүн кошумча катмар */
 .pulsing-dot::after {
   content: '';
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  
+  /* БУЛ ЖЕР ЭҢ МААНИЛҮҮ: Толкун так ортодон чыгыш үчүн */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  
+  width: 100%;
+  height: 100%;
   background-color: #3b82f6;
   border-radius: 50%;
-  animation: dotPulse 1.5s infinite;
+  z-index: -1; /* Тень тоголоктун астында болушу керек */
+  
+  /* dotPulse анимациясын колдонобуз */
+  animation: dotPulse 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
 
-/* Тень жайылып, чоңоюп, жоголот */
+/* Картадагыдай "радар" анимациясы */
+@keyframes dotPulse {
+  0% {
+    /* translate(-50%, -50%) бул жерде да болушу шарт */
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4); /* 4 эсе чоңоюп жайылат */
+    opacity: 0; /* Акырында толук жок болот */
+  }
+}
+
+/* Бул сиздин мурунку анимацияңыз, эгер керек болсо калтырып коюңуз */
 @keyframes slideUpReveal {
   from {
     opacity: 0;
@@ -962,9 +986,4 @@ td {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-@keyframes dotPulse {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(3); opacity: 0; }
 }
