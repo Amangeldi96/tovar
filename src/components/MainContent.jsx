@@ -262,27 +262,21 @@ const selectSuggestion = (product) => {
   className={`ai-btn-inside ${aiMode ? 'active' : ''}`}
   disabled={isAiLoading}
   onClick={() => {
-    if (!aiMode) {
-      fetchFromAI();
-    } else {
-      setAiMode(false);
-    }
+    if (!aiMode) fetchFromAI();
+    else setAiMode(false);
   }}
 >
   {isAiLoading ? (
-    /* 1. Жүктөлүп жатканда: Үч чекит */
-    <div className="typing-loader">
-      <span></span>
-      <span></span>
-      <span></span>
+    /* Жүктөлүүдөгү үч чекит */
+    <div className="btn-typing-loader">
+      <span></span><span></span><span></span>
     </div>
   ) : aiMode ? (
-    /* 2. Иштеп жатканда: Сиздин кичинекей күйүп-өчкөн тоголок */
-    <span className="dot-anchor-btn">
-      <span className="pulsing-dot-fixed"></span>
+    /* ИИ табылгандагы баскычтын ичиндеги өзгөчө ак тоголок */
+    <span className="btn-dot-container">
+      <span className="btn-pulsing-dot"></span>
     </span>
   ) : (
-    /* 3. Өчүк болсо: Текст */
     'ИИ'
   )}
 </button>
