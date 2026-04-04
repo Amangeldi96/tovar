@@ -935,8 +935,8 @@ td {
 .dot-anchor {
   position: relative;
   display: inline-block;
-  width: 10px; /* Бул жер анимация үчүн бош мейкиндик */
-  height: 10px;
+  width: 20px; /* Бул жер анимация үчүн бош мейкиндик */
+  height: 20px;
   margin-left: 5px;
 }
 
@@ -946,8 +946,8 @@ td {
   left: 50%;
   transform: translate(-50%, -50%);
   
-  width: 26px;
-  height: 26px;
+  width: 6px;
+  height: 6px;
   background-color: #3b82f6;
   border-radius: 50%;
   
@@ -958,14 +958,17 @@ td {
   animation: radar-final-fixed 2s infinite ease-out;
 }
 
-@keyframes radar-mini {
+@keyframes radar-final-fixed {
   0% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+    /* Баштапкы абалы - тень жок */
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
   }
   70% {
-    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0);
+    /* Тень 8px чейин гана жайылат - бул назик жана кесилүү коркунучу аз */
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
   }
   100% {
+    /* Акырында толук жоголот */
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
 }
