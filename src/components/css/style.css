@@ -960,13 +960,13 @@ td {
 
 @keyframes radar-final-fixed {
   0% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    box-shadow: 0 0 0 0 rgba(39, 130, 246, 0.7);
   }
   70% {
     /* Тень 12px чейин жайылат, эми ал кесилбейт, анткени контейнер (dot-anchor) жетиштүү кенен */
-    box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
+    box-shadow: 0 0 0 12px rgba(39, 130, 246, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    box-shadow: 0 0 0 0 rgba(39, 130, 246, 0);
   }
 }
