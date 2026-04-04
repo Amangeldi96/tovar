@@ -931,45 +931,42 @@ td {
 }
 
 
-/* Тоголоктун сыртындагы контейнер */
-.pulsing-container {
+/* Точканы тексттин жанына байлап турган "казык" */
+.dot-anchor {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 12px;  /* Тоголок үчүн атайын орун */
-  height: 12px;
-  margin-left: 8px;
-  vertical-align: middle;
+  display: inline-block;
+  width: 20px; /* Бул жер анимация үчүн бош мейкиндик */
+  height: 20px;
+  margin-left: 5px;
 }
 
-.pulsing-dot {
-  display: inline-block;
+.pulsing-dot-fixed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
   width: 6px;
   height: 6px;
   background-color: #3b82f6;
   border-radius: 50%;
-  margin-left: 12px;
-  position: relative;
-  vertical-align: middle;
   
-  /* shadow ордуна outline анимациясын колдонобуз */
-  animation: outline-radar 2s infinite;
+  /* z-index бул жерде керек, тень тексттин үстүнө чыгып кетпеши үчүн */
+  z-index: 10;
+
+  /* Анимация */
+  animation: radar-final-fixed 2s infinite ease-out;
 }
 
-@keyframes outline-radar {
+@keyframes radar-final-fixed {
   0% {
-    /* outline-offset терс болсо тоголоктун ичинде болот */
-    outline: 0px solid rgba(59, 130, 246, 0.8);
-    outline-offset: 0px;
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
   }
   70% {
-    /* outline сыртка карай 12px жайылат */
-    outline: 12px solid rgba(59, 130, 246, 0);
-    outline-offset: 0px;
+    /* Тень 12px чейин жайылат, эми ал кесилбейт, анткени контейнер (dot-anchor) жетиштүү кенен */
+    box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
   }
   100% {
-    outline: 0px solid rgba(59, 130, 246, 0);
-    outline-offset: 0px;
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
 }
