@@ -931,32 +931,32 @@ td {
 }
 
 
-.pulsing-dot {
-  display: inline-block;
-  /* Тоголоктун өзүн кичирейттик */
-  width: 6px;
-  height: 6px;
+.pulsing-dot-abs {
+  /* Absolute позициясы тоголокту эркин кылат, тень кесилбейт */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* Тоголоктун өзү (өтө кичинекей жана назик) */
+  width: 5px;
+  height: 5px;
   background-color: #3b82f6;
   border-radius: 50%;
-  position: relative;
-  vertical-align: middle;
-  margin-left: 8px;
   
-  /* Анимацияны жумшартыш үчүн 2 секунд кылдык */
-  animation: radar-shadow-fine 2s infinite ease-out;
+  /* Радар эффекти (тень) */
+  animation: radar-fine-abs 2s infinite ease-out;
 }
 
-@keyframes radar-shadow-fine {
+@keyframes radar-fine-abs {
   0% {
-    /* Башында көлөкө жок */
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6);
   }
-  50% {
-    /* Ортосунда көлөкө назик жайылат (10px - бул нормалдуу) */
+  70% {
+    /* Тень 10px чейин гана жайылат - бул абдан назик көрүнөт */
     box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
   }
   100% {
-    /* Аягында толук жоголот */
     box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
 }

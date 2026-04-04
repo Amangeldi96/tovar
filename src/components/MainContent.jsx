@@ -286,17 +286,16 @@ const selectSuggestion = (product) => {
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-          <span>
-            {p.name} 
-           {p.isAiResult && (
-  <span 
-    className="pulsing-dot" 
-    style={{ marginLeft: '8px' }}
-  ></span>
-)}
-          </span>
-          <small style={{ color: '#6366f1', fontWeight: 'bold' }}>{p.price} сом</small>
-        </div>
+  <span style={{ display: 'flex', alignItems: 'center' }}>
+    {p.name} 
+    {p.isAiResult && (
+      <span style={{ position: 'relative', width: '10px', height: '10px', marginLeft: '12px' }}>
+        <span className="pulsing-dot-abs"></span>
+      </span>
+    )}
+  </span>
+  <small style={{ color: '#6366f1', fontWeight: 'bold' }}>{p.price} сом</small>
+</div>
       </div>
     ))}
   </div>
