@@ -934,50 +934,37 @@ td {
 
 /* pulsing-dot классына стиль жана анимация */
 .pulsing-dot {
-  display: inline-block;
-  width: 8px; /* Бир аз кичирээк кылсак назик көрүнөт */
-  height: 8px;
-  background-color: #6366f1;
+  width: 6px;
+  height: 6px;
+  background-color: #3b82f6;
   border-radius: 50%;
   position: relative;
-  vertical-align: middle;
-  /* Негизги тоголок да бир аз өчүп-күйүп турат */
-  animation: pulse-opacity 1.5s infinite ease-in-out;
 }
 
 /* Радар (тень) эффекти үчүн кошумча катмар */
 .pulsing-dot::after {
   content: '';
   position: absolute;
-  /* Тень так ортосунан чыгышы үчүн маанилүү! */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); 
-  
-  width: 100%;
-  height: 100%;
-  background-color: #6366f1;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: #3b82f6;
   border-radius: 50%;
-  z-index: -1; /* Тень тоголоктун астында болуш керек */
-  
-  /* Жайылуу анимациясы */
-  animation: pulse-ring-expand 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  animation: dotPulse 1.5s infinite;
 }
 
 /* Тень жайылып, чоңоюп, жоголот */
-@keyframes pulse-ring-expand {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(3.5); /* 3.5 эсе жайылат */
+@keyframes slideUpReveal {
+  from {
     opacity: 0;
+    transform: translateY(12px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
-/* Негизги тоголоктун өчүп-күйүүсү */
-@keyframes pulse-opacity {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+@keyframes dotPulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(3); opacity: 0; }
 }
