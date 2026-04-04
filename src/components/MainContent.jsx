@@ -286,13 +286,9 @@ const selectSuggestion = (product) => {
         }}
       >
   <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-  <span style={{ display: 'flex', alignItems: 'center' }}>
+<span style={{ display: 'flex', alignItems: 'center' }}>
   {p.name} 
-  {p.isAiResult && (
-    <span className="pulsing-container">
-      <span className="pulsing-dot"></span>
-    </span>
-  )}
+  {p.isAiResult && <span className="pulsing-dot"></span>}
 </span>
   <small style={{ color: '#6366f1', fontWeight: 'bold' }}>{p.price} сом</small>
 </div>
