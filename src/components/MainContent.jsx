@@ -285,7 +285,7 @@ const selectSuggestion = (product) => {
           selectSuggestion(p);
         }}
       >
-  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+  <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
   <span style={{ display: 'flex', alignItems: 'center' }}>
     {p.name} 
     {p.isAiResult && (
