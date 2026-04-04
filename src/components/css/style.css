@@ -931,59 +931,54 @@ td {
 }
 
 
-
-/* pulsing-dot классына стиль жана анимация */
+/* Башкы тоголок - көлөмүн бир аз чоңойттук (9px) */
 .pulsing-dot {
   display: inline-block;
-  width: 7px;
-  height: 7px;
-  background-color: #3b82f6; /* Сиз тандаган көк түс */
+  width: 9px;
+  height: 9px;
+  background-color: #3b82f6; 
   border-radius: 50%;
   position: relative;
   vertical-align: middle;
+  margin-left: 8px;
+  /* Негизги тоголок өзү да бир аз жылтылдап турат */
+  box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
 }
 
-/* Радар (тень) эффекти үчүн кошумча катмар */
+/* Радар эффекти (Тень жайылып чыкканы) */
 .pulsing-dot::after {
   content: '';
   position: absolute;
   
-  /* БУЛ ЖЕР ЭҢ МААНИЛҮҮ: Толкун так ортодон чыгыш үчүн */
+  /* Толкун так ортодон башталышы үчүн */
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   
   width: 100%;
   height: 100%;
   background-color: #3b82f6;
   border-radius: 50%;
-  z-index: -1; /* Тень тоголоктун астында болушу керек */
+  z-index: 1; /* Көрүнүш үчүн 1 кылып койдук */
   
-  /* dotPulse анимациясын колдонобуз */
-  animation: dotPulse 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  /* Анимацияны 1.5 секунд кылдык, тезирээк жана байкаларлык болот */
+  animation: radar-pulse 1.5s ease-out infinite;
 }
 
-/* Картадагыдай "радар" анимациясы */
-@keyframes dotPulse {
+@keyframes radar-pulse {
   0% {
-    /* translate(-50%, -50%) бул жерде да болушу шарт */
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.8;
   }
+  /* Бул жерде тень 4 эсе чоңоюп, абдан байкаларлык жайылат */
   100% {
-    transform: translate(-50%, -50%) scale(4); /* 4 эсе чоңоюп жайылат */
-    opacity: 0; /* Акырында толук жок болот */
+    transform: translate(-50%, -50%) scale(4.5);
+    opacity: 0;
   }
 }
 
-/* Бул сиздин мурунку анимацияңыз, эгер керек болсо калтырып коюңуз */
+/* Сиздин эски анимацияңыз - тийбей эле коёлу */
 @keyframes slideUpReveal {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  from { opacity: 0; transform: translateY(12px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
