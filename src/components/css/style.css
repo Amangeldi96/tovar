@@ -935,8 +935,8 @@ td {
 .dot-anchor {
   position: relative;
   display: inline-block;
-  width: 20px; /* Бул жер анимация үчүн бош мейкиндик */
-  height: 20px;
+  width: 10px; /* Бул жер анимация үчүн бош мейкиндик */
+  height: 10px;
   margin-left: 5px;
 }
 
@@ -960,13 +960,15 @@ td {
 
 @keyframes radar-final-fixed {
   0% {
-    box-shadow: 0 0 0 0 rgba(39, 130, 246, 0.7);
+    /* Баштапкы абалы - тень жок */
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
   }
   70% {
-    /* Тень 12px чейин жайылат, эми ал кесилбейт, анткени контейнер (dot-anchor) жетиштүү кенен */
-    box-shadow: 0 0 0 12px rgba(39, 130, 246, 0);
+    /* Тень 8px чейин гана жайылат - бул назик жана кесилүү коркунучу аз */
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(39, 130, 246, 0);
+    /* Акырында толук жоголот */
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
   }
 }
