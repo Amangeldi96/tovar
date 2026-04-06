@@ -144,7 +144,13 @@ const Login = ({ onLoginSuccess, onBack }) => {
                   required
                 />
               </div>
-              <button type="submit" className="action-btn">Шилтеме жөнөтүү</button>
+              <button 
+  type="submit" 
+  className="action-btn" 
+  disabled={loading}
+>
+  {loading ? "Күтө туруңуз..." : "Шилтеме жөнөтүү"}
+</button>
             </form>
           </div>
         </div>
