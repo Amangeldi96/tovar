@@ -11,6 +11,7 @@ const Login = ({ onLoginSuccess, onBack }) => {
   const [showForgot, setShowForgot] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,22 +25,37 @@ const Login = ({ onLoginSuccess, onBack }) => {
     }
   };
 
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    setError('');
-    setMessage('');
-    if (!email) {
-      setError("Email жазыңыз!");
-      return;
-    }
-    try {
-      await sendPasswordResetEmail(auth, email);
-      setMessage("Шилтеме почтаңызга жөнөтүлдү.");
-    } catch (err) {
-      setError("Email табылган жок же туура эмес!");
-    }
-  };
+ const handleResetPassword = async (e) => {
+  e.preventDefault();
+  setError('');
+  setMessage('');
+  
+  if (!email) {
+    setError("Email жазыңыз!");
+    return;
+  }
 
+  setLoading(true); // Процесс башталды
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    setMessage("Шилтеме почтаңызга жөнөтүлдү.");
+  } catch (err) {
+    // Firebase ката кодуна карап жооп берүү
+    if (err.code === 'auth/user-not-found') {
+      setError("Бул почта катталган эмес!");
+    } else if (err.code === 'auth/invalid-email') {
+      setError("Почта форматы ката!");
+    } else if (err.code === 'auth/too-many-requests') {
+      setError("Өтө көп аракет! Бир аздан кийин байкап көрүңүз.");
+    } else {
+      setError("Ката кетти. Кайра аракет кылыңыз.");
+    }
+    console.log(err.code); // Текшерүү үчүн консолго чыгаруу
+  } finally {
+    setLoading(false); // Процесс бүттү
+  }
+};
   return (
     <div className="auth-wrapper-wrapper">
       <div className={`auth-wrapper ${showForgot ? 'show-forgot' : ''}`}>
