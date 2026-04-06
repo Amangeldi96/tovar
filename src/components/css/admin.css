@@ -115,7 +115,7 @@
   border-radius: 20px;
   border: 1px solid var(--border-color);
   overflow-x: auto; /* Мобилдик үчүн горизонталдык скролл */
-  max-height: 700px; /* Таблицанын максималдуу бийиктиги */
+  max-height: 680px; /* Таблицанын максималдуу бийиктиги */
   overflow-y: auto;  /* Вертикалдык скроллду иштетүү */
   position: relative;
 }
