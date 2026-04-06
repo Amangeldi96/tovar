@@ -90,10 +90,10 @@ const fetchFromAI = async () => {
   
   setIsAiLoading(true);
   try {
-    const response = await fetch('/api/classify', { 
+      const response = await fetch('https://tovarkg.vercel.app/api/classify', { 
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-     body: JSON.stringify({ 
+      body: JSON.stringify({ 
         query: formData.name + " цена в Кыргызстане в сомах" 
       })
     });
