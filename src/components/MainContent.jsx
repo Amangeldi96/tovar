@@ -93,7 +93,9 @@ const fetchFromAI = async () => {
     const response = await fetch('/api/classify', { 
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: formData.name })
+     body: JSON.stringify({ 
+        query: formData.name + " цена в Кыргызстане в сомах" 
+      })
     });
 
     const data = await response.json();
