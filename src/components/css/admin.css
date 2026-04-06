@@ -109,32 +109,34 @@
   transform: translateY(-1px);
 }
 
-/* ТАБЛИЦА */
+/* 1. Таблицанын контейнерине бийиктик жана скролл беребиз */
 .table-wrapper {
   background: white;
   border-radius: 20px;
   border: 1px solid var(--border-color);
-  overflow: hidden;
+  overflow-x: auto; /* Мобилдик үчүн горизонталдык скролл */
+  max-height: 600px; /* Таблицанын максималдуу бийиктиги */
+  overflow-y: auto;  /* Вертикалдык скроллду иштетүү */
+  position: relative;
 }
 
-.modern-table {
-  width: 100%;
-  border-collapse: collapse;
+/* 2. Таблицанын шапкасын (Header) катыруу */
+.modern-table thead th {
+  position: sticky;
+  top: 0;           /* Эң өйдө жабышып турат */
+  background: #f8fafc; /* Шапканын түсү (астындагы тексттер көрүнбөшү керек) */
+  z-index: 10;      /* Тизмеден жогору турушу үчүн */
+  box-shadow: 0 1px 0 var(--border-color); /* Астындагы сызык даана көрүнүшү үчүн */
+  height: 50px;     /* Шапканын бийиктиги */
 }
 
-.modern-table th {
-  background: #f8fafc;
-  padding: 15px 20px;
-  text-align: left;
-  font-size: 12px;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+/* 3. Скроллдун сырткы көрүнүшүн бир аз кооздоп койсо болот (милдеттүү эмес) */
+.table-wrapper::-webkit-scrollbar {
+  width: 6px;
 }
-
-.modern-table td {
-  padding: 15px 20px;
-  border-bottom: 1px solid #f1f5f9;
+.table-wrapper::-webkit-scrollbar-thumb {
+  background-color: #e2e8f0;
+  border-radius: 10px;
 }
 
 .col-price { font-weight: 700; color: var(--primary); }
